@@ -1,0 +1,20 @@
+@use "variable";
+@use "../../layouts/home_page_aside/home_aside";
+@use "../../features/blog_browse/browse";
+@use "../../layouts/hero/hero";
+@use "../../features//auth_modal/auth";
+
+#home-page {
+  background: variable.$secondary-bg;
+  display: flex;
+  flex-direction: column;
+}
+
+#home-container {
+  padding: 10em 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
+  gap: 2em;
+  color: variable.$primary-color;
+}

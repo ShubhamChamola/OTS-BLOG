@@ -1,0 +1,51 @@
+@use "../../assets/styles/variable";
+
+#manage-account-aside {
+  grid-column: 1/2;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 8em;
+
+  .profile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .avatar {
+      width: 70px;
+      aspect-ratio: 1;
+      background-position: center !important;
+      background-size: cover !important;
+      background-repeat: no-repeat !important;
+      border-radius: 58px;
+    }
+
+    h4 {
+      font-weight: 600;
+      font-size: 1.7rem;
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+
+    li a {
+      font-size: 1.1rem;
+      padding: 0.75em;
+      color: variable.$primary-color;
+      font-weight: 600;
+      width: fit-content;
+      border-radius: 16px;
+
+      &.active {
+        font-weight: 600;
+        background: variable.$tertiary-bg;
+        color: variable.$secondary-color;
+      }
+    }
+  }
+}

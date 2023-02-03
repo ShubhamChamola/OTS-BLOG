@@ -1,0 +1,23 @@
+@use "variable";
+
+button {
+  font-family: variable.$secondary-font;
+  font-size: 0.7rem;
+  padding: 0.95em 1.7em;
+  min-width: 110px;
+  font-weight: 700;
+  border-radius: 45px;
+  cursor: pointer;
+  outline: none;
+  border: 1.5px solid transparent;
+  color: variable.$primary-color;
+}
+
+.outlined-btn {
+  background-color: transparent;
+  border-color: variable.$action-color;
+}
+
+.solid-btn {
+  background: variable.$action-color;
+}

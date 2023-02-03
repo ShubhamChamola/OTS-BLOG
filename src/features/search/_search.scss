@@ -1,0 +1,45 @@
+@use "../../assets/styles/variable";
+
+#search-bar {
+  width: 100%;
+  margin: 0 auto;
+  border: 2px solid variable.$tertiary-bg;
+  background: transparent;
+  padding: 0.45em 0.7em;
+  font-family: variable.$secondary-font;
+  border-radius: 44px;
+  position: relative;
+
+  input {
+    max-width: 90%;
+    width: min-content;
+    font-size: 0.85rem;
+    padding: 0.7em;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    color: variable.$primary-color;
+
+    &.active {
+      color: variable.$secondary-color;
+      background: variable.$tertiary-bg;
+    }
+  }
+
+  svg {
+    width: 22px;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+    circle {
+      fill: variable.$tertiary-bg;
+    }
+    path {
+      fill: variable.$secondary-bg;
+    }
+  }
+}

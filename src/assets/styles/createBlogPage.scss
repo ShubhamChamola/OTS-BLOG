@@ -1,0 +1,35 @@
+@use "./variable";
+@use "../../features/blog_creator/blogCreator";
+
+#create-blog-page {
+  width: 100%;
+  padding-top: 4em;
+  padding-bottom: 15em;
+  background: variable.$secondary-bg;
+
+  #create-blog-container {
+    & > div {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding-top: 2em;
+      cursor: pointer;
+
+      svg {
+        width: 20px;
+
+        path {
+          fill: variable.$secondary-bg;
+        }
+
+        circle {
+          fill: variable.$tertiary-bg;
+        }
+      }
+
+      span {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

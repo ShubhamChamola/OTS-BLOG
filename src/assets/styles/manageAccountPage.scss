@@ -1,0 +1,16 @@
+@use "./variable";
+@use "./profileSetting-userSecurity";
+@use "../../layouts/manage_account_aside/manageAccountAside";
+@use "../../features/user_blogs/userBlogs";
+
+#manage-account {
+  width: 100%;
+  background: variable.$secondary-bg;
+  padding: 10em 0 15em 0;
+
+  #manage-account-container {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 6em;
+  }
+}

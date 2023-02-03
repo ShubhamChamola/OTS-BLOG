@@ -1,0 +1,120 @@
+@use "./variable";
+
+#profile-setting,
+#user-security form {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  row-gap: 2.5em;
+  column-gap: 3em;
+  width: fit-content;
+  margin: 0 auto;
+
+  @for $i from 1 through 5 {
+    label:nth-child(#{$i}) {
+      grid-column: 1/2;
+      grid-row: $i;
+    }
+  }
+
+  label {
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: variable.$primary-color;
+    align-self: center;
+  }
+
+  input {
+    font-size: 1rem;
+    min-width: 300px;
+    padding: 1em 1em;
+    border-radius: 44px;
+    border: 2px solid variable.$quaternary-color;
+    outline: none;
+    color: inherit;
+    background: transparent;
+
+    &.active {
+      border-color: variable.$blue;
+    }
+
+    &.error {
+      border-color: variable.$red;
+    }
+
+    &.valid {
+      border-color: variable.$green;
+    }
+  }
+
+  .file-field {
+    grid-column: 2/3;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+
+    input {
+      display: none;
+    }
+
+    .selected-avatar {
+      width: 150px;
+      aspect-ratio: 1;
+      background-position: center !important;
+      background-size: cover !important;
+      background-repeat: no-repeat !important;
+      border-radius: 85px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      padding: 0.7em 1.25em;
+      background: variable.$primary-bg;
+      margin: 0;
+      border-radius: 44px;
+      cursor: pointer;
+    }
+  }
+
+  .show-password {
+    opacity: 1 !important;
+  }
+
+  button {
+    grid-column: 1/3;
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 5em;
+
+    &:disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+}
+
+#user-security {
+  display: grid;
+  width: fit-content;
+  margin: 0 auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, auto);
+  gap: 10em;
+
+  .delete-account {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+
+    h4 {
+      font-size: 1.25rem;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+    button {
+      background: variable.$red;
+    }
+  }
+}

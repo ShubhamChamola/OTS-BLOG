@@ -1,0 +1,36 @@
+@use "../../assets/styles/variable";
+@use "../../features/search/search";
+@use "../../features/site_theme/theme";
+@use "../../features/blog_categories/category";
+@use "../../features/liked_by_others/liked_blogs";
+
+aside {
+  font-family: variable.$primary-font;
+  grid-column: 1/2;
+  width: 100%;
+  width: 336px;
+  height: fit-content;
+  padding: 2em 2em 3em 2em;
+  background: variable.$primary-bg;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3.75em;
+  position: relative;
+  left: -50px;
+
+  #service-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    h3 {
+      font-size: 1.15rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    button {
+      margin: 0;
+    }
+  }
+}

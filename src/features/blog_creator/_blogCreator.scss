@@ -1,0 +1,139 @@
+@use "../../assets/styles/variable";
+
+#create-blog {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  width: fit-content;
+  max-width: 1000px;
+  margin: 0 auto;
+  row-gap: 6em;
+  column-gap: 10em;
+  padding-top: 8em;
+
+  @for $i from 1 through 5 {
+    label:nth-child(7n) {
+      grid-row: $i;
+    }
+    input,
+    textarea {
+      grid-column: 2/3;
+    }
+  }
+
+  label {
+    font-size: 1.15rem;
+    font-weight: 500;
+    height: fit-content;
+    align-self: center;
+  }
+
+  button {
+    grid-column: 1/3;
+    margin: 0 auto;
+  }
+
+  input,
+  textarea {
+    font-family: variable.$primary-font;
+    font-size: 1rem;
+    padding: 1em;
+    border-radius: 44px;
+    border: 2px solid variable.$quaternary-color;
+    outline: none;
+    color: inherit;
+    background: transparent;
+    width: 700px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: variable.$primary-bg;
+      width: 0px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: variable.$grey;
+      border-radius: 4px;
+    }
+
+    &.active {
+      border-color: variable.$blue;
+    }
+
+    &.error {
+      border-color: variable.$red;
+    }
+
+    &.valid {
+      border-color: variable.$green;
+    }
+  }
+
+  textarea {
+    border-radius: 24px;
+  }
+
+  label:nth-child(3),
+  label:nth-child(8),
+  label:nth-child(12) {
+    padding-top: 1em;
+    align-self: unset;
+  }
+
+  #blog-intro {
+    min-height: 150px;
+  }
+
+  #blog-category {
+    width: 300px;
+  }
+
+  .img-field {
+    position: relative;
+    width: fit-content;
+
+    .selected-img {
+      width: 480px;
+      height: 280px;
+      background-position: center !important;
+      background-size: cover !important;
+      background-repeat: no-repeat !important;
+    }
+    label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: variable.$secondary-color;
+      background: variable.$tertiary-bg;
+      padding: 0.65em 1em;
+      border-radius: 44px;
+      cursor: pointer;
+    }
+  }
+
+  #blog-image {
+    display: none;
+  }
+
+  #blog-read-time {
+    width: 200px;
+  }
+
+  #blog-body {
+    min-height: 500px;
+  }
+
+  button {
+    margin-top: 4em;
+
+    &:disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+}

@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Navigation from "./layouts/navigation";
+import Footer from "./layouts/footer";
+import { Outlet } from "react-router-dom";
+import "./assets/styles/global.scss";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./lib/firebase";
+import findUserRole from "./services/auth/findUserRole";
+import { getUserInfo } from "./services/auth/getUserInfo";
+import addUserToDB from "./services/auth/addUserToDB";
+import useUnsubFuncsStore from "./store/useUnsubFuncsStore";
+import useUserInfoStore from "./store/useUserInfoStore";
+import useAuthStore from "./store/useAuthStore";
 
-function App() {
+const App: React.FC = () => {
+  const clearUserInfo = useUserInfoStore((state) => state.clearStore);
+  const clearAuthInfo = useAuthStore((state) => state.clearStore);
+  const { unSubGetUserInfo } = useUnsubFuncsStore.getState();
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      console.log(user);
+      const roleFound = await findUserRole(user.uid);
+      if (roleFound) {
+        await getUserInfo(user.uid);
+      } else {
+        addUserToDB(user);
+      }
+    } else {
+      console.log("No one is loagged in!");
+      clearUserInfo();
+      clearAuthInfo();
+      unSubGetUserInfo && unSubGetUserInfo();
+    }
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <>
+      <header>
+        <Navigation />
       </header>
-    </div>
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </>
   );
-}
-
+};
 export default App;

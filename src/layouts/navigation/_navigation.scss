@@ -1,0 +1,47 @@
+@use "../../assets/styles/variable";
+
+nav {
+  grid-column: 1;
+  grid-row: 1/2;
+  width: 100%;
+  max-width: 1160px;
+  height: fit-content;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: variable.$secondary-font;
+  padding: 1.7em 0;
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3em;
+
+    .user-account {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: variable.$secondary-bg;
+      border-radius: 12px;
+      padding: 10px 15px;
+      cursor: pointer;
+
+      div:first-child {
+        width: 30px;
+        aspect-ratio: 1;
+        border-radius: 50px;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+      }
+
+      span {
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: variable.$primary-color;
+      }
+    }
+  }
+}

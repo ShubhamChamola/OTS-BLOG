@@ -1,0 +1,129 @@
+@use "../../assets/styles/variable";
+
+#specific-blog {
+  grid-column: 2/3;
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+
+  h2 {
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 110%;
+  }
+
+  #blog-interaction {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    height: fit-content;
+
+    li svg {
+      width: 23px;
+      fill: variable.$tertiary-color;
+    }
+
+    li:nth-child(4) svg {
+      width: 19px;
+      height: 23px;
+    }
+  }
+
+  & > p {
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 170%;
+  }
+
+  #blog-image {
+    width: 100%;
+    aspect-ratio: 1/0.55;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  #blog-base {
+    display: flex;
+    gap: 2em;
+    justify-content: space-between;
+    margin-top: 3.5em;
+
+    .writter {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      font-family: variable.$secondary-font;
+
+      & > span {
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        color: variable.$tertiary-color;
+        font-weight: 400;
+      }
+
+      .writter-info {
+        display: flex;
+        gap: 1.5em;
+        align-items: center;
+
+        div:first-child {
+          width: 80px;
+          aspect-ratio: 1;
+          overflow: hidden;
+          border-radius: 50px;
+          position: relative;
+          background: transparent;
+
+          img {
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+
+        div:last-child {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          color: variable.$tertiary-color;
+
+          span:first-child {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            word-spacing: 0.25em;
+            color: variable.$primary-color;
+          }
+
+          span:nth-child(2) {
+            font-size: 0.9rem;
+            word-spacing: 0.2em;
+          }
+
+          span:last-child {
+            font-size: 0.9rem;
+            word-spacing: 0.2em;
+          }
+        }
+      }
+    }
+
+    #blog-interaction {
+      width: fit-content;
+      margin: 0;
+      margin-top: 20px;
+    }
+  }
+}

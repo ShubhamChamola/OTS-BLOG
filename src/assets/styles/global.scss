@@ -1,0 +1,58 @@
+@use "variable";
+@use "button";
+@use "logo";
+@use "container";
+@use "social";
+@use "blog_tile";
+@use "../../layouts/navigation/navigation";
+@use "../../layouts/footer/footer";
+
+*,
+*::before,
+*::after {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: variable.$primary-font;
+  color: variable.$primary-color;
+  font-size: 16px;
+}
+
+body {
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: variable.$primary-bg;
+    width: 0px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: variable.$grey;
+    border-radius: 16px;
+  }
+}
+header {
+  background: variable.$primary-bg;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  width: fit-content;
+}
+
+svg {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

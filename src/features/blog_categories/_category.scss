@@ -1,0 +1,35 @@
+@use "../../assets/styles/variable";
+
+#set-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  h4 {
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+  }
+
+  ul {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    li {
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      width: fit-content;
+      padding: 0.35em 0.75em;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    li.active {
+      font-weight: 600;
+      background: variable.$tertiary-bg;
+      color: variable.$secondary-color;
+    }
+  }
+}

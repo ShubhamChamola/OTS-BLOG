@@ -1,0 +1,51 @@
+@use "../../assets/styles/variable";
+
+#liked-blogs {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  cursor: pointer;
+
+  h4 {
+    font-weight: 400;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    margin-bottom: -1.75em;
+  }
+
+  .blog-min-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    h5 {
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 120%;
+    }
+
+    div {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+
+      span {
+        font-size: 0.8rem;
+      }
+
+      span:nth-child(2) {
+        font-size: 0.75rem;
+      }
+
+      span:nth-child(3) {
+        margin: 0 0 0 auto;
+
+        svg {
+          width: 13px;
+          height: 16px;
+          fill: variable.$tertiary-bg;
+        }
+      }
+    }
+  }
+}
