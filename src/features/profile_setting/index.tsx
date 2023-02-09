@@ -4,10 +4,31 @@ import { nameValidator, bioValidator } from "../../utils/validators";
 import useAuthStore from "../../store/useAuthStore";
 import updateProfile from "../../services/manageAccount/updateprofile";
 import useUserInfoStore from "../../store/useUserInfoStore";
+import useLoadingState from "../../store/useLoadState";
+import ComponentLoader from "../../components/loaders/component_loader/ComponentLoader";
+
+interface AdminInfoType {
+  firstName: string | null;
+  lastName: string | null;
+  avatar: string | null;
+  avatarFileAddress: string | null;
+  bio: string | null;
+  blogs: string[];
+}
+interface UserInfoType {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  avatar: string | null;
+  avatarFileAddress: string | null;
+  blogs: string[];
+}
 
 const ProfileSetting: React.FC = () => {
   const role = useAuthStore((state) => state.role);
   const prevUserInfo = useUserInfoStore((state) => state);
+
+  const { isLoading } = useLoadingState((state) => state);
 
   const [formValues, setFormValues] = useState<{
     firstName: string | null;
@@ -17,7 +38,7 @@ const ProfileSetting: React.FC = () => {
   }>({
     firstName: prevUserInfo.firstName,
     lastName: prevUserInfo.lastName,
-    bio: prevUserInfo.bio,
+    bio: role === "Admin" ? (prevUserInfo as AdminInfoType).bio : null,
     avatar: prevUserInfo.avatar,
   });
 
@@ -111,7 +132,10 @@ const ProfileSetting: React.FC = () => {
           prevUserInfo.firstName?.toLowerCase() ||
         formValues.lastName?.toLowerCase() !==
           prevUserInfo.lastName?.toLowerCase() ||
-        (formValues.bio && formValues.bio !== prevUserInfo.bio))
+        (role === "Admin" &&
+          formValues.bio &&
+          formValues.bio !==
+            (useUserInfoStore.getState() as AdminInfoType).bio))
     ) {
       setBtnDisabled(false);
     } else {
@@ -124,105 +148,113 @@ const ProfileSetting: React.FC = () => {
     role,
     prevUserInfo.firstName,
     prevUserInfo.lastName,
-    prevUserInfo.bio,
     formValues.firstName,
     formValues.lastName,
     formValues.bio,
     avatarChanged,
   ]);
 
-  return (
+  return isLoading ? (
+    <ComponentLoader />
+  ) : (
     <form id="profile-setting">
-      <label htmlFor="first-name">First Name</label>
-      <label htmlFor="last-name">Last Name</label>
-      {role === "Admin" && <label htmlFor="bio">Bio</label>}
-      <label htmlFor="user-avatar">User Avatar</label>
-      <input
-        onChange={(event) => {
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              firstName: event.target.value.trim(),
-            };
-          });
-        }}
-        onFocus={() => {
-          firstNameRef.current?.classList.add("active");
-        }}
-        onBlur={() => {
-          firstNameRef.current?.classList.remove("active");
-        }}
-        type="text"
-        name="firstName"
-        id="first-name"
-        pattern="^[a-zA-Z]{1,20}$"
-        title="first name should only contain letters. e.g. john or John"
-        value={formValues.firstName ? formValues.firstName : ""}
-        placeholder="Enter First Name"
-        ref={firstNameRef}
-      />
-      <input
-        onChange={(event) => {
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              lastName: event.target.value.trim(),
-            };
-          });
-        }}
-        onFocus={() => {
-          lastNameRef.current?.classList.add("active");
-        }}
-        onBlur={() => {
-          lastNameRef.current?.classList.remove("active");
-        }}
-        pattern="^[a-zA-Z]{1,20}$"
-        title="last name should only contain letters. e.g. john or John"
-        type="text"
-        name="lastName"
-        id="last-name"
-        value={formValues.lastName ? formValues.lastName : ""}
-        placeholder="Enter Last Name"
-        ref={lastNameRef}
-      />
-      {role === "Admin" && (
+      <div className="input-container">
+        <label htmlFor="first-name">First Name</label>
         <input
           onChange={(event) => {
             setFormValues((prev) => {
               return {
                 ...prev,
-                bio: event.target.value,
+                firstName: event.target.value.trim(),
               };
             });
           }}
           onFocus={() => {
-            bioRef.current?.classList.add("active");
+            firstNameRef.current?.classList.add("active");
           }}
           onBlur={() => {
-            bioRef.current?.classList.remove("active");
+            firstNameRef.current?.classList.remove("active");
           }}
           type="text"
-          name="bio"
-          id="bio"
-          value={formValues.bio ? formValues.bio : ""}
-          title="Length of bio should not be greater than 50"
-          placeholder="Describe yourself in titles or words seperated by comma like:- abc, def"
-          ref={bioRef}
+          name="firstName"
+          id="first-name"
+          pattern="^[a-zA-Z]{1,20}$"
+          title="first name should only contain letters. e.g. john or John"
+          value={formValues.firstName ? formValues.firstName : ""}
+          placeholder="Enter First Name"
+          ref={firstNameRef}
         />
-      )}
-      <div className="file-field">
-        <div
-          className="selected-avatar"
-          style={{
-            background: `url(${
-              formValues.avatar
-                ? typeof formValues.avatar === "string"
-                  ? formValues.avatar
-                  : URL.createObjectURL(formValues.avatar)
-                : ""
-            })`,
+      </div>
+      <div className="input-container">
+        <label htmlFor="last-name">Last Name</label>
+        <input
+          onChange={(event) => {
+            setFormValues((prev) => {
+              return {
+                ...prev,
+                lastName: event.target.value.trim(),
+              };
+            });
           }}
-        ></div>
+          onFocus={() => {
+            lastNameRef.current?.classList.add("active");
+          }}
+          onBlur={() => {
+            lastNameRef.current?.classList.remove("active");
+          }}
+          pattern="^[a-zA-Z]{1,20}$"
+          title="last name should only contain letters. e.g. john or John"
+          type="text"
+          name="lastName"
+          id="last-name"
+          value={formValues.lastName ? formValues.lastName : ""}
+          placeholder="Enter Last Name"
+          ref={lastNameRef}
+        />
+      </div>
+      {role === "Admin" && (
+        <div className="input-container">
+          <label htmlFor="bio">Bio</label>
+          <input
+            onChange={(event) => {
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  bio: event.target.value,
+                };
+              });
+            }}
+            onFocus={() => {
+              bioRef.current?.classList.add("active");
+            }}
+            onBlur={() => {
+              bioRef.current?.classList.remove("active");
+            }}
+            type="text"
+            name="bio"
+            id="bio"
+            value={formValues.bio ? formValues.bio : ""}
+            title="Length of bio should not be greater than 50"
+            placeholder="Describe yourself in titles or words seperated by comma like:- abc, def"
+            ref={bioRef}
+          />
+        </div>
+      )}
+      <div className="input-container">
+        <label htmlFor="user-avatar">
+          <div
+            className="selected-avatar"
+            style={{
+              background: `url(${
+                formValues.avatar
+                  ? typeof formValues.avatar === "string"
+                    ? formValues.avatar
+                    : URL.createObjectURL(formValues.avatar)
+                  : ""
+              })`,
+            }}
+          ></div>
+        </label>
         <input
           onChange={(event) => {
             setAvatarChanged(true);
@@ -251,7 +283,11 @@ const ProfileSetting: React.FC = () => {
         className="solid-btn"
         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           event.preventDefault();
-          handleFormSubmission({ ...prevUserInfo }, formValues, avatarChanged);
+          handleFormSubmission(
+            { bio: null, ...prevUserInfo },
+            formValues,
+            avatarChanged
+          );
           setAvatarChanged(false);
         }}
       >
@@ -286,6 +322,5 @@ function handleFormSubmission(
     needUpdate["bio"] = currValue.bio;
 
   if (avatarChanged) updateProfile(needUpdate, currValue.avatar as File);
-  console.log(needUpdate);
   updateProfile(needUpdate);
 }

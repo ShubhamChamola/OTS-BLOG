@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
-const logo = require("../../assets/images/OTS_Logo.png") as string;
+import OTSLogo from "../../assets/icons/OTSLogo";
 
 const Logo: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +11,7 @@ const Logo: React.FC = () => {
         navigate("/");
       }}
     >
-      <img src={logo} alt="ONE TAP SERVICE logo" />
+      <OTSLogo />
     </div>
   );
 };

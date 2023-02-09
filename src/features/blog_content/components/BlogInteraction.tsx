@@ -17,12 +17,12 @@ const BlogInteraction: React.FC = () => {
 
   const location = useLocation();
 
-  const bookmarkedBlogs = useUserInfoStore((state) => state.bookmarkedBlogs);
+  const blogIds = useUserInfoStore((state) => state.blogs);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const { blogId } = useParams();
-  const userId = useAuthStore((state) => state.userId);
-  const role = useAuthStore((state) => state.role);
+
+  const { role, userId } = useAuthStore((state) => state);
 
   useEffect(() => {
     if (blogId && userId) fetchLikeInfo(blogId, userId, setLikedState);
@@ -30,12 +30,12 @@ const BlogInteraction: React.FC = () => {
 
   useEffect(() => {
     if (role !== "Admin")
-      if (blogId && bookmarkedBlogs.includes(blogId)) {
+      if (blogId && blogIds.includes(blogId)) {
         setIsBookmarked(true);
       } else {
         setIsBookmarked(false);
       }
-  }, [bookmarkedBlogs, blogId, role]);
+  }, [blogIds, blogId, role]);
 
   return (
     <ul id="blog-interaction">
@@ -59,7 +59,7 @@ const BlogInteraction: React.FC = () => {
       {role !== "Admin" && (
         <li
           onClick={() => {
-            bookmarkBlog(userId!, blogId!);
+            userId && blogId && bookmarkBlog(userId, blogId);
           }}
         >
           {isBookmarked ? <ActiveBookmarkSVG /> : <BookmarkSVG />}

@@ -5,42 +5,15 @@
 
 #blog-page {
   width: 100%;
-  background: variable.$secondary-bg;
-  padding: 10em;
+  background: var(--secondary-bg);
+  color: var(--primary-color);
+  padding: 6em;
 
   #blog-container {
     display: grid;
     grid-template-columns: repeat(2, auto);
     justify-content: center;
     gap: 6em;
-
-    .back {
-      display: flex;
-      align-items: center;
-      background: variable.$primary-bg;
-      width: fit-content;
-      height: fit-content;
-      padding: 0.35em 1.75em 0.35em 0.5em;
-      border-radius: 44px;
-      grid-row: 1;
-      grid-column: 1/3;
-      cursor: pointer;
-
-      svg {
-        width: 40px;
-        circle {
-          fill: transparent;
-        }
-        path {
-          fill: variable.$tertiary-bg;
-        }
-      }
-
-      span {
-        font-size: 1rem;
-        font-weight: 600;
-      }
-    }
   }
 
   #similar-blogs {
@@ -61,8 +34,40 @@
       grid-column: 1/4;
       font-size: 1.5rem;
       text-align: center;
-      color: variable.$tertiary-color;
+      color: var(--tertiary-color);
       opacity: 0.8;
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #blog-page {
+    padding: 8em 0em;
+    padding-bottom: 6em;
+
+    #blog-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0em;
+      padding: 0;
+    }
+
+    #similar-blogs {
+      display: flex;
+      flex-direction: column;
+      padding: 5em 0em;
+
+      h4 {
+        font-size: 1.25rem;
+      }
+
+      .blog-tile {
+        margin-bottom: 2em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }

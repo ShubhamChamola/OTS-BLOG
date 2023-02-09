@@ -3,10 +3,10 @@
 #search-bar {
   width: 100%;
   margin: 0 auto;
-  border: 2px solid variable.$tertiary-bg;
+  border: 2px solid var(--tertiary-bg);
   background: transparent;
   padding: 0.45em 0.7em;
-  font-family: variable.$secondary-font;
+  font-family: var(--secondary-font);
   border-radius: 44px;
   position: relative;
 
@@ -19,11 +19,11 @@
     border: none;
     outline: none;
     border-radius: 12px;
-    color: variable.$primary-color;
+    color: var(--primary-color);
 
     &.active {
-      color: variable.$secondary-color;
-      background: variable.$tertiary-bg;
+      color: var(--secondary-color);
+      background: var(--tertiary-bg);
     }
   }
 
@@ -36,10 +36,10 @@
     cursor: pointer;
 
     circle {
-      fill: variable.$tertiary-bg;
+      fill: var(--tertiary-bg);
     }
     path {
-      fill: variable.$secondary-bg;
+      fill: var(--secondary-bg);
     }
   }
 }

@@ -5,7 +5,7 @@ import useUserInfoStore from "../../../store/useUserInfoStore";
 import formatDate from "../../../utils/formatDate";
 import { useState, useEffect } from "react";
 import useAuthStore from "../../../store/useAuthStore";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Props {
   title: string;
@@ -20,47 +20,40 @@ const BlogMinimalTile: React.FC<Props> = ({
   createdAt,
   blogId,
 }) => {
-  const role = useAuthStore((state) => state.role);
-  const userId = useAuthStore((state) => state.userId);
+  const { role, userId } = useAuthStore((state) => state);
 
-  const navigate = useNavigate();
-
-  const bookmarkedBlogs = useUserInfoStore((state) => state.bookmarkedBlogs);
+  const blogIds = useUserInfoStore((state) => state.blogs);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     if (role !== "Admin")
-      if (bookmarkedBlogs.includes(blogId)) {
+      if (blogIds.includes(blogId)) {
         setIsBookmarked(true);
       } else {
         setIsBookmarked(false);
       }
-  }, [bookmarkedBlogs, blogId, role]);
+  }, [blogIds, role]);
 
   return (
-    <div
-      className="blog-min-tile"
-      id={blogId}
-      onClick={() => {
-        navigate(`/blog/${blogId}`);
-      }}
-    >
-      <h5>{title}</h5>
+    <div className="blog-min-tile" id={blogId}>
+      <h5>
+        <Link to={`/blog/${blogId}`}>{title}</Link>
+      </h5>
       <div>
-        <span>{readTime} Min Read</span>
-        <span>
-          {formatDate(new Date((createdAt as any).seconds * 1000), "full")}
-        </span>
         {role !== "Admin" && (
           <span
             onClick={() => {
-              bookmarkBlog(userId!, blogId);
+              userId && bookmarkBlog(userId, blogId);
             }}
           >
             {isBookmarked ? <ActiveBookmarkSVG /> : <BookmarkSVG />}
           </span>
         )}
+        <span>{readTime} Min Read</span>
+        <span>
+          {formatDate(new Date((createdAt as any).seconds * 1000), "full")}
+        </span>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
 import uploadImage from "../uploadFile/uploadImage";
 import useUserInfoStore from "../../store/useUserInfoStore";
+import useLoadingState from "../../store/useLoadState";
 
 interface Arg {
   firstName?: string;
@@ -11,6 +12,7 @@ interface Arg {
 }
 
 export default async function updateProfile(data: Arg, avatar?: File) {
+  useLoadingState.setState({ isLoading: true });
   const { userId, role } = useAuthStore.getState();
   const { avatarFileAddress } = useUserInfoStore.getState();
 
@@ -28,6 +30,8 @@ export default async function updateProfile(data: Arg, avatar?: File) {
         `${role === "User" ? "user_avatar" : "admin_avatar"}`,
         avatarFileAddress!
       );
+    } else {
+      useLoadingState.setState({ isLoading: false });
     }
   });
 }

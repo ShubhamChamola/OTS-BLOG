@@ -13,18 +13,7 @@ const SignedInLinks: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <ul className="nav-links">
-      <li>
-        <Button
-          id="sign-out"
-          onClick={async () => {
-            await signOut(auth);
-          }}
-          className="outlined-btn"
-        >
-          Sign Out
-        </Button>
-      </li>
+    <>
       <li>
         <div
           className="user-account"
@@ -36,7 +25,18 @@ const SignedInLinks: React.FC = () => {
           <span>{formatUserName(firstName, lastName)}</span>
         </div>
       </li>
-    </ul>
+      <li>
+        <Button
+          id="sign-out"
+          onClick={async () => {
+            await signOut(auth);
+          }}
+          className="outlined-btn"
+        >
+          Sign Out
+        </Button>
+      </li>
+    </>
   );
 };
 

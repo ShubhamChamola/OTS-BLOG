@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ArrowSVG from "../../assets/icons/ArrowSVG";
 import useHomeBlogStore from "../../store/useHomeBlogStore";
 
 const BlogCategories: React.FC = () => {
@@ -16,7 +17,16 @@ const BlogCategories: React.FC = () => {
 
   return (
     <article id="set-categories">
-      <h4>CATEGORIES</h4>
+      <h4
+        onClick={(event) => {
+          event.currentTarget.parentElement?.classList.toggle("active");
+        }}
+      >
+        Categories
+        <span>
+          <ArrowSVG />
+        </span>
+      </h4>
       <ul>
         <li
           id="All-Blogs"

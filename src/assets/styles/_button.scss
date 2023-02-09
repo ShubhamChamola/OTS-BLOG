@@ -1,23 +1,42 @@
-@use "variable";
-
 button {
-  font-family: variable.$secondary-font;
+  font-family: var(--primary-font);
   font-size: 0.7rem;
-  padding: 0.95em 1.7em;
+  padding: 0.8em 2em;
   min-width: 110px;
-  font-weight: 700;
+  font-weight: 500;
   border-radius: 45px;
   cursor: pointer;
   outline: none;
   border: 1.5px solid transparent;
-  color: variable.$primary-color;
+  color: var(--primary-color);
+  transition: all linear 0.3s;
+  background-color: transparent;
 }
 
 .outlined-btn {
-  background-color: transparent;
-  border-color: variable.$action-color;
+  border-color: var(--action-color);
 }
 
 .solid-btn {
-  background: variable.$action-color;
+  background: var(--action-color);
+  color: var(--white);
+}
+
+@media screen and (max-width: 850px) {
+  button {
+    min-width: unset;
+    padding: 0;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    background-color: unset !important;
+    border-color: unset !important;
+    border-radius: 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--primary-color);
+
+    &:hover {
+      color: var(--action-color);
+    }
+  }
 }

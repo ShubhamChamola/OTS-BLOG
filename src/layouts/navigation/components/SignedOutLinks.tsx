@@ -7,18 +7,7 @@ const SignedOutLinks: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <ul className="nav-links">
-      <li>
-        <Button
-          id="book-service-nav"
-          onClick={() => {
-            console.log("Book a Service");
-          }}
-          className="outlined-btn"
-        >
-          Book a Service
-        </Button>
-      </li>
+    <>
       <li>
         <Button
           id="sign-in-btn"
@@ -30,8 +19,20 @@ const SignedOutLinks: React.FC = () => {
           Sign In
         </Button>
       </li>
+      <li>
+        <Button
+          id="book-service-nav"
+          onClick={() => {
+            console.log("Book a Service");
+          }}
+          className="outlined-btn"
+        >
+          Book a Service
+        </Button>
+      </li>
+
       {showModal && <AuthModal changeModalState={setShowModal} />}
-    </ul>
+    </>
   );
 };
 

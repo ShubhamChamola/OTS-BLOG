@@ -1,7 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
 
-interface Blog {
+interface BlogType {
   title: string;
   category: string;
   image: string | null;
@@ -12,7 +12,7 @@ interface Blog {
 
 export default async function fetchBlogsBasedOnIds(
   Ids: string[],
-  setBlogs: React.Dispatch<React.SetStateAction<Blog[]>>
+  setBlogs: React.Dispatch<React.SetStateAction<[] | BlogType[]>>
 ) {
   try {
     Ids.forEach(async (id) => {

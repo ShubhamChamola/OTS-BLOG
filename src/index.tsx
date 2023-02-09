@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -6,14 +7,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App";
-import AdminAuthPage from "./pages/AdminAuthPage";
-import HomePage from "./pages/HomePage";
-import ManageAccountPage from "./pages/ManageAccountPage";
-import ProfileSetting from "./features/profile_setting";
-import UserBlogs from "./features/user_blogs";
-import UserSecurity from "./features/user_security";
-import CreateBlogPage from "./pages/CreateBlogPage";
-import BlogPage from "./pages/BlogPage";
+
+const ManageAccountPage = lazy(() => import("./pages/ManageAccountPage"));
+const AdminAuthPage = lazy(() => import("./pages/AdminAuthPage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const ProfileSetting = lazy(() => import("./features/profile_setting"));
+const UserBlogs = lazy(() => import("./features/user_blogs"));
+const UserSecurity = lazy(() => import("./features/user_security"));
+const CreateBlogPage = lazy(() => import("./pages/CreateBlogPage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(

@@ -34,11 +34,11 @@
 
   input,
   textarea {
-    font-family: variable.$primary-font;
+    font-family: var(--primary-font);
     font-size: 1rem;
     padding: 1em;
     border-radius: 44px;
-    border: 2px solid variable.$quaternary-color;
+    border: 2px solid var(--quaternary-color);
     outline: none;
     color: inherit;
     background: transparent;
@@ -49,25 +49,25 @@
     }
 
     &::-webkit-scrollbar-track {
-      background-color: variable.$primary-bg;
+      background-color: var(--primary-bg);
       width: 0px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: variable.$grey;
+      background-color: var(--grey);
       border-radius: 4px;
     }
 
     &.active {
-      border-color: variable.$blue;
+      border-color: var(--blue);
     }
 
     &.error {
-      border-color: variable.$red;
+      border-color: var(--red);
     }
 
     &.valid {
-      border-color: variable.$green;
+      border-color: var(--green);
     }
   }
 
@@ -108,8 +108,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: variable.$secondary-color;
-      background: variable.$tertiary-bg;
+      color: var(--secondary-color);
+      background: var(--tertiary-bg);
       padding: 0.65em 1em;
       border-radius: 44px;
       cursor: pointer;

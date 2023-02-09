@@ -1,30 +1,49 @@
-// Font Types
-$primary-font: "Barlow", sans-serif;
-$secondary-font: "Mulish", sans-serif;
+:root {
+  // Font
+  --primary-font: "Roboto", sans-serif;
+  --secondary-font: "Barlow", sans-serif;
 
-// Colors
-$black: #252627;
-$off-black: #2a2a2a;
-$white: #ffffff;
-$off-white: #f8f8f8;
-$orange: #ff3f00;
-$off-orange: #f35f44;
-$green: #4e8d50;
-$red: #ed455d;
-$grey: #6d7d8b;
-$off-grey: #dedede;
-$extra-off-grey: #dae3ea;
-$blue: #5a4ff3;
+  // Colors
+  --black: #252627;
+  --off-black: #2a2a2a;
+  --white: #ffffff;
+  --off-white: #f8f8f8;
+  --orange: #ff3f00;
+  --off-orange: #f35f44;
+  --green: #4e8d50;
+  --red: #ed455d;
+  --grey: #6d7d8b;
+  --off-grey: #dedede;
+  --extra-off-grey: #dae3ea;
+  --blue: #5a4ff3;
+}
 
-// Font colors
-$primary-color: $white;
-$secondary-color: $black;
-$tertiary-color: $off-grey;
-$quaternary-color: $grey;
-$action-color: $off-orange;
+.dark {
+  // Font colors
+  --primary-color: var(--white);
+  --secondary-color: var(--black);
+  --tertiary-color: var(--off-grey);
+  --quaternary-color: var(--grey);
+  --action-color: var(--off-orange);
 
-// Background colors
-$primary-bg: $off-black;
-$secondary-bg: $black;
-$tertiary-bg: $white;
-$quaternary-bg: $grey;
+  // Background colors
+  --primary-bg: var(--off-black);
+  --secondary-bg: var(--black);
+  --tertiary-bg: var(--white);
+  --quaternary-bg: var(--grey);
+}
+
+.light {
+  // Font colors
+  --primary-color: var(--black);
+  --secondary-color: var(--white);
+  --tertiary-color: var(--off-black);
+  --quaternary-color: var(--grey);
+  --action-color: var(--off-orange);
+
+  // Background colors
+  --primary-bg: var(--white);
+  --secondary-bg: var(--off-white);
+  --tertiary-bg: var(--black);
+  --quaternary-bg: var(--grey);
+}

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ReactDOM from "react-dom";
 import googleAuth from "../../services/auth/googleAuth";
 import Container from "../../components/ui/Container";
@@ -12,8 +11,6 @@ interface Props {
 }
 
 const AuthModal: React.FC<Props> = ({ changeModalState }) => {
-  const [authState, setAuthState] = useState<"signIn" | "signUp">("signUp");
-
   return ReactDOM.createPortal(
     <div
       id="auth-modal"
@@ -35,7 +32,8 @@ const AuthModal: React.FC<Props> = ({ changeModalState }) => {
             <CloseSVG />
           </div>
         </div>
-        <h3>{authState === "signUp" ? "Sign Up" : "Sign In"}</h3>
+        <h3>Sign In</h3>
+        <p>Sign in to enjoy the full benefits of our services</p>
         <div className="btns">
           <Button
             id="google-auth"
@@ -45,6 +43,7 @@ const AuthModal: React.FC<Props> = ({ changeModalState }) => {
             className="outlined-btn"
           >
             <GoogleSVG />
+            <span></span>
             <span>Google</span>
           </Button>
           <Button
@@ -55,39 +54,14 @@ const AuthModal: React.FC<Props> = ({ changeModalState }) => {
             className="outlined-btn"
           >
             <FaceBookSVG />
+            <span></span>
             <span>Facebook</span>
           </Button>
         </div>
-        <div className="seperator">
-          <span>OR</span>
-          <span></span>
-        </div>
         <p>
-          {authState === "signUp"
-            ? "Already Have An Account?"
-            : "Don't Have An Account Sign Up For Free"}
+          By continuing, you agree to OTS ’s <span>Terms of Use</span> . Read
+          our <span>Privacy Policy</span>.
         </p>
-        {authState === "signUp" ? (
-          <Button
-            id="sign-In"
-            className="outlined-btn"
-            onClick={() => {
-              setAuthState("signIn");
-            }}
-          >
-            Sign In
-          </Button>
-        ) : (
-          <Button
-            id="sign-up"
-            className="outlined-btn"
-            onClick={() => {
-              setAuthState("signUp");
-            }}
-          >
-            Sign Up
-          </Button>
-        )}
       </Container>
     </div>,
     document.querySelector("body") as HTMLElement

@@ -4,33 +4,44 @@
 @use "../../features/blog_categories/category";
 @use "../../features/liked_by_others/liked_blogs";
 
-aside {
-  font-family: variable.$primary-font;
+#homePageAside {
   grid-column: 1/2;
   width: 100%;
   width: 336px;
+  flex-shrink: 0;
   height: fit-content;
   padding: 2em 2em 3em 2em;
-  background: variable.$primary-bg;
-  border-radius: 16px;
+  background: var(--primary-bg);
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
-  gap: 3.75em;
+  gap: 5em;
   position: relative;
   left: -50px;
 
   #service-modal {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1.2em;
 
     h3 {
-      font-size: 1.15rem;
-      letter-spacing: 0.05em;
-      font-weight: 600;
+      font-size: 1.2rem;
+      font-weight: 500;
     }
     button {
       margin: 0;
     }
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  #homePageAside {
+    left: 0;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  #homePageAside {
+    display: none;
   }
 }

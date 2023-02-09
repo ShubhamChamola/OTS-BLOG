@@ -1,6 +1,7 @@
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { updateDoc, doc } from "firebase/firestore";
 import { firestoreDB, storage } from "../../lib/firebase";
+import useLoadingState from "../../store/useLoadState";
 
 export default async function uploadImage(
   imageFile: File,
@@ -9,11 +10,13 @@ export default async function uploadImage(
   type: "user_avatar" | "admin_avatar" | "blog_thumbnail",
   fileAddress?: string
 ) {
+  if (!useLoadingState.getState().isLoading) {
+    useLoadingState.setState({ isLoading: true });
+  }
   const uploadTask = uploadBytesResumable(
     ref(storage, `${fileAddress ? fileAddress : `${type}/${fileName}`}`),
     imageFile
   );
-  console.log(fileAddress);
   // Listen for state changes, errors, and completion of the upload.
   uploadTask.on(
     "state_changed",
@@ -31,6 +34,7 @@ export default async function uploadImage(
       }
     },
     (error) => {
+      useLoadingState.setState({ isLoading: false });
       switch (error.code) {
         case "storage/unauthorized":
           // User doesn't have permission to access the object
@@ -52,6 +56,7 @@ export default async function uploadImage(
             avatar: downloadURL,
             avatarFileAddress: `${type}/${fileName}`,
           }).then(() => {
+            useLoadingState.setState({ isLoading: false });
             if (window.location.pathname !== "/manage-account")
               window.location.reload();
           });
@@ -60,6 +65,7 @@ export default async function uploadImage(
             avatar: downloadURL,
             avatarFileAddress: `${type}/${fileName}`,
           }).then(() => {
+            useLoadingState.setState({ isLoading: false });
             if (window.location.pathname !== "/manage-account")
               window.location.reload();
           });
@@ -68,8 +74,11 @@ export default async function uploadImage(
             image: downloadURL,
             fileAddress: `${type}/${fileName}`,
           }).then(() => {
+            useLoadingState.setState({ isLoading: false });
             return "done";
           });
+        } else {
+          useLoadingState.setState({ isLoading: false });
         }
       });
     }

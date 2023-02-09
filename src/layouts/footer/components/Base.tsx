@@ -49,8 +49,10 @@ const Base: React.FC = () => {
         </div>
       </div>
       <div className="terms">
-        <span>Privacy Policy</span>
-        <span>Terms & Consitions</span>
+        <div>
+          <span>Privacy Policy</span>
+          <span>Terms & Consitions</span>
+        </div>
         <p>© 2022 One Tap Service All rights reserved.</p>
       </div>
     </article>

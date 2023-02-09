@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 3em;
+  color: var(--primary-color);
 
   h2 {
     font-weight: 700;
@@ -21,7 +22,7 @@
 
     li svg {
       width: 23px;
-      fill: variable.$tertiary-color;
+      fill: var(--tertiary-color);
     }
 
     li:nth-child(4) svg {
@@ -38,7 +39,7 @@
 
   #blog-image {
     width: 100%;
-    aspect-ratio: 1/0.55;
+    aspect-ratio: 1/0.6;
     overflow: hidden;
     position: relative;
 
@@ -61,12 +62,12 @@
       display: flex;
       flex-direction: column;
       gap: 1em;
-      font-family: variable.$secondary-font;
+      font-family: var(--secondary-font);
 
       & > span {
         font-size: 0.8rem;
         letter-spacing: 0.1em;
-        color: variable.$tertiary-color;
+        color: var(--tertiary-color);
         font-weight: 400;
       }
 
@@ -97,14 +98,14 @@
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          color: variable.$tertiary-color;
+          color: var(--tertiary-color);
 
           span:first-child {
             font-size: 1rem;
             font-weight: 600;
             letter-spacing: 0.05em;
             word-spacing: 0.25em;
-            color: variable.$primary-color;
+            color: var(--primary-color);
           }
 
           span:nth-child(2) {
@@ -124,6 +125,28 @@
       width: fit-content;
       margin: 0;
       margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #specific-blog {
+    gap: 2em;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    & > p {
+      font-size: 0.9rem;
+    }
+
+    #blog-base {
+      margin-top: 2em;
+
+      #blog-interaction {
+        display: none;
+      }
     }
   }
 }

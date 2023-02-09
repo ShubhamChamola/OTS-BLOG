@@ -3,14 +3,12 @@
 #liked-blogs {
   display: flex;
   flex-direction: column;
-  gap: 3em;
-  cursor: pointer;
+  gap: 2.5em;
 
   h4 {
-    font-weight: 400;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    margin-bottom: -1.75em;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-bottom: -0.5em;
   }
 
   .blog-min-tile {
@@ -22,28 +20,28 @@
       font-size: 1rem;
       font-weight: 500;
       line-height: 120%;
+      cursor: pointer;
+
+      &:hover {
+        transition: color linear 0.2s;
+        color: var(--action-color);
+      }
     }
 
     div {
       display: flex;
-      gap: 15px;
+      gap: 1em;
       align-items: center;
+      flex-wrap: wrap;
+      row-gap: 10px;
 
       span {
-        font-size: 0.8rem;
-      }
-
-      span:nth-child(2) {
         font-size: 0.75rem;
-      }
 
-      span:nth-child(3) {
-        margin: 0 0 0 auto;
-
-        svg {
-          width: 13px;
-          height: 16px;
-          fill: variable.$tertiary-bg;
+        &:nth-child(1):nth-last-child(3) svg {
+          width: 12px;
+          height: 18px;
+          fill: var(--tertiary-bg);
         }
       }
     }

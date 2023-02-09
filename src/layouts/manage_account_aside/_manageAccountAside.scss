@@ -1,20 +1,22 @@
 @use "../../assets/styles/variable";
 
 #manage-account-aside {
-  grid-column: 1/2;
-  max-width: 340px;
   display: flex;
   flex-direction: column;
-  gap: 8em;
+  gap: 4em;
+  background: var(--primary-bg);
+  padding: 2em 2em 4em 2em;
+  border-radius: 4px;
+  height: min-content;
 
   .profile {
-    width: 100%;
     display: flex;
     align-items: center;
     gap: 20px;
 
     .avatar {
       width: 70px;
+      flex-shrink: 0;
       aspect-ratio: 1;
       background-position: center !important;
       background-size: cover !important;
@@ -23,8 +25,9 @@
     }
 
     h4 {
-      font-weight: 600;
-      font-size: 1.7rem;
+      flex-wrap: wrap;
+      font-weight: 500;
+      font-size: 1.5rem;
     }
   }
 
@@ -33,18 +36,58 @@
     flex-direction: column;
     gap: 3em;
 
-    li a {
-      font-size: 1.1rem;
-      padding: 0.75em;
-      color: variable.$primary-color;
-      font-weight: 600;
-      width: fit-content;
-      border-radius: 16px;
+    li {
+      font-size: 1rem;
+      color: var(--primary-color);
+      font-weight: 500;
 
-      &.active {
+      a {
+        padding: 0.55em 1.25em 0.55em 0em;
+        border-radius: 4px;
+      }
+
+      a.active {
         font-weight: 600;
-        background: variable.$tertiary-bg;
-        color: variable.$secondary-color;
+        background: var(--tertiary-bg);
+        color: var(--secondary-color);
+        padding-left: 0.75em;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #manage-account-aside {
+    max-width: unset;
+    width: fit-content;
+    gap: 1em;
+    padding: 1em 2em 1.5em 2em;
+    margin: 0 auto;
+
+    .profile {
+      display: none;
+    }
+
+    ul {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3em;
+
+      li a {
+        padding: 0;
+        border-radius: unset;
+        padding-bottom: 4px;
+        border-bottom: 1px solid var(--primary-color);
+        transition: color linear 0.3s;
+
+        &.active {
+          font-weight: 500;
+          background: unset;
+          color: var(--action-color);
+          border-color: var(--action-color);
+          padding-left: 0;
+        }
       }
     }
   }

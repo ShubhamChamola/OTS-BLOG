@@ -1,60 +1,59 @@
 import create from "zustand";
-import { persist, devtools } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
+import useAuthStore from "./useAuthStore";
 
-interface State {
+const role = useAuthStore.getState().role;
+
+interface AdminInfoType {
   firstName: string | null;
   lastName: string | null;
   avatar: string | null;
-  email: string | null;
-  bio: string | null;
   avatarFileAddress: string | null;
-  bookmarkedBlogs: string[];
-  createdBlogs: string[];
+  bio: string | null;
+  blogs: string[];
+
+  clearStore: () => void;
+}
+interface UserInfoType {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  avatar: string | null;
+  avatarFileAddress: string | null;
+  blogs: string[];
+
   clearStore: () => void;
 }
 
-const useStore = create<State>()(
-  devtools(
-    persist(
-      (set) => ({
-        firstName: null,
-        lastName: null,
-        avatar: null,
-        email: null,
-        bio: null,
-        avatarFileAddress: null,
-        createdBlogs: [],
-        bookmarkedBlogs: [],
+let initialAdminInfoState = {
+  firstName: null,
+  lastName: null,
+  avatar: null,
+  avatarFileAddress: null,
+  bio: null,
+  blogs: [],
+};
 
-        clearStore: () =>
-          set((state) => ({
-            ...state,
-            firstName: null,
-            lastName: null,
-            avatar: null,
-            email: null,
-            bio: null,
-            avatarFileAddress: null,
-            bookmarkedBlogs: [],
-            createdBlogs: [],
-          })),
-      }),
+let initialUserInfoState = {
+  firstName: null,
+  lastName: null,
+  email: null,
+  avatar: null,
+  avatarFileAddress: null,
+  blogs: [],
+};
 
-      {
-        name: "user-info-storage",
-        getStorage: () => sessionStorage,
-        partialize: (state) => ({
-          firstName: state.firstName,
-          lastName: state.lastName,
-          avatar: state.avatar,
-          email: state.email,
-          bio: state.bio,
-          avatarFileAddress: state.avatarFileAddress,
-          bookmarkedBlogs: state.bookmarkedBlogs,
-          createdBlogs: state.createdBlogs,
-        }),
-      }
-    )
+const useStore = create<AdminInfoType | UserInfoType>()(
+  devtools((set) =>
+    role === "Admin"
+      ? {
+          ...initialAdminInfoState,
+          clearStore: () => set(initialAdminInfoState),
+        }
+      : {
+          ...initialUserInfoState,
+          clearStore: () => set(initialUserInfoState),
+        }
   )
 );
 

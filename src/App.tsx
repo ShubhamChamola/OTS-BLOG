@@ -10,6 +10,8 @@ import addUserToDB from "./services/auth/addUserToDB";
 import useUnsubFuncsStore from "./store/useUnsubFuncsStore";
 import useUserInfoStore from "./store/useUserInfoStore";
 import useAuthStore from "./store/useAuthStore";
+import { Suspense, useEffect } from "react";
+import PageLoader from "./components/loaders/page_loader/PageLoader";
 
 const App: React.FC = () => {
   const clearUserInfo = useUserInfoStore((state) => state.clearStore);
@@ -33,13 +35,19 @@ const App: React.FC = () => {
     }
   });
 
+  useEffect(() => {
+    document.querySelector("body")?.classList.add("light");
+  }, []);
+
   return (
     <>
       <header>
         <Navigation />
       </header>
       <main>
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
     </>

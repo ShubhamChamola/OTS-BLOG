@@ -1,4 +1,3 @@
-@use "variable";
 @use "button";
 @use "logo";
 @use "container";
@@ -13,31 +12,34 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+  transition: background-color 0.25s linear 0.25s, color 0.15s linear 0s;
 }
 
 html {
-  font-family: variable.$primary-font;
-  color: variable.$primary-color;
-  font-size: 16px;
+  font-family: var(--primary-font);
+
+  font-size: clamp(20px, 5vw, 16px);
 }
 
 body {
+  overflow-x: hidden !important;
+  color: var(--primary-color);
   &::-webkit-scrollbar {
     width: 12px;
   }
 
   &::-webkit-scrollbar-track {
-    background-color: variable.$primary-bg;
+    background-color: var(--primary-bg);
     width: 0px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: variable.$grey;
+    background-color: var(--grey);
     border-radius: 16px;
   }
 }
 header {
-  background: variable.$primary-bg;
+  background: var(--primary-bg);
 }
 
 ul {

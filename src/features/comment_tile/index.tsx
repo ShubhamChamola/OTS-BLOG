@@ -80,7 +80,7 @@ const CommentTile: React.FC = () => {
             }}
             className="outlined-btn"
           >
-            show more
+            Show More
           </Button>
         )}
         <CommentInput />

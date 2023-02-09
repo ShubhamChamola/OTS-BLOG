@@ -71,7 +71,7 @@ const CommentInput: React.FC = () => {
         </div>
       ) : (
         <div className="user-comment">
-          <p>Plz login to chat</p>
+          <p>Please sign in to chat</p>
         </div>
       )}
     </>

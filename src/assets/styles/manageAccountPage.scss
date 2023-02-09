@@ -1,16 +1,34 @@
 @use "./variable";
-@use "./profileSetting-userSecurity";
 @use "../../layouts/manage_account_aside/manageAccountAside";
+@use "../../features/profile_setting/profileSetting";
 @use "../../features/user_blogs/userBlogs";
+@use "../../features/user_security/useSecurity";
 
 #manage-account {
   width: 100%;
-  background: variable.$secondary-bg;
-  padding: 10em 0 15em 0;
+  background: var(--secondary-bg);
+  padding: 8em 0 10em 0;
+  transition: all linear 0s !important;
 
   #manage-account-container {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: 6em;
+    display: flex;
+    gap: 4em;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #manage-account {
+    padding: 4em 0em 8em 0em;
+
+    #manage-account-container {
+      flex-direction: column;
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #manage-account {
+    padding: 8em 0em 8em 0em;
   }
 }

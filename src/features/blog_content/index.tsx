@@ -25,6 +25,8 @@ interface WritterData {
   writtenAt: Date;
 }
 
+console.log("oskfnskfn");
+
 const dummyBlogImage = require("../../assets/images/default_blog_image.jpg")!;
 
 const BlogContent: React.FC = () => {
@@ -61,7 +63,7 @@ const BlogContent: React.FC = () => {
             <p key={para.slice(0, 10) + index}>{para}</p>
           ))}
           {writterInfo && <BlogContentBase {...writterInfo} />}
-          {/* <SimilarBlogs category={blogData.category} /> */}
+          <SimilarBlogs category={blogData.category} />
         </>
       ) : (
         "This Blog Doesn't exist in the Database"

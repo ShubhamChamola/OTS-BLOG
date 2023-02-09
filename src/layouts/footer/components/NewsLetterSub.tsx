@@ -12,7 +12,9 @@ const NewsLetterSub: React.FC = () => {
       </div>
       <div className="email-input">
         <input type="email" placeholder="Your Email" />
-        <MailSVG />
+        <div>
+          <MailSVG />
+        </div>
       </div>
     </div>
   );

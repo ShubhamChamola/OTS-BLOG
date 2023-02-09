@@ -16,11 +16,14 @@ interface Blog {
 }
 
 export default async function fetchLikedBlogs(
-  setBlog: React.Dispatch<React.SetStateAction<Blog[]>>
+  setBlog: React.Dispatch<React.SetStateAction<Blog[]>>,
+  setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  let blogs: Blog[] = [];
-
   try {
+    let blogs: Blog[] = [];
+
+    setIsFetching(true);
+
     const blogsQuery = query(
       collection(firestoreDB, "blogs"),
       where("likes", ">", 0),
@@ -30,12 +33,15 @@ export default async function fetchLikedBlogs(
 
     const unsubscribe = onSnapshot(blogsQuery, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
+        setIsFetching(true);
         const { title, readTime, createdAt } = doc.data();
         blogs.push({ title, readTime, createdAt, blogId: doc.id });
         setBlog(blogs);
+        setIsFetching(false);
       });
     });
   } catch (error) {
     console.log(error);
+    setIsFetching(false);
   }
 }

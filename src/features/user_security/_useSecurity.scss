@@ -1,0 +1,24 @@
+@use "../../assets/styles/variable";
+
+#user-security {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  margin: 0 auto;
+
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  button {
+    background: var(--red);
+  }
+}
+
+@media screen and (max-width: 850px) {
+  #user-security {
+    button {
+      color: var(--primary-color);
+    }
+  }
+}
