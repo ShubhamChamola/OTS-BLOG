@@ -1,6 +1,6 @@
 // React Modules
 import { Suspense, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 // Components
 import Navigation from "./layouts/navigation";
@@ -16,6 +16,8 @@ import "./assets/styles/global.scss";
 import useLoaderStore from "./store/useLoaderStore";
 
 const App: React.FC = () => {
+  const location = useLocation();
+
   useEffect(() => {
     // Remove the inital loader from DOM
     setTimeout(() => {
@@ -27,6 +29,10 @@ const App: React.FC = () => {
 
     useLoaderStore.setState({ isFetchingInitialUserInfo: true });
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
