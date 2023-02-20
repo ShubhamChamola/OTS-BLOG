@@ -41,6 +41,7 @@ export default async function fetchLikedBlogs(
         setIsFetching(false);
       });
     });
+    setIsFetching(false);
   } catch (error) {
     console.log(error);
     setIsFetching(false);
