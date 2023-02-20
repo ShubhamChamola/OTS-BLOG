@@ -66,7 +66,7 @@ export default async function addBlogToDB(data: BlogDataType) {
         window.history.back();
       } else {
         await updateDoc(doc(firestoreDB, "admins", userID), {
-          createdBlogs: arrayUnion(blogRef.id),
+          blogIDs: arrayUnion(blogRef.id),
         });
         useLoaderStore.setState({ isLoading: false });
         window.history.back();
