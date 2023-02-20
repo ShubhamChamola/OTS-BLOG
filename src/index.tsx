@@ -1,3 +1,4 @@
+// React Modules
 import { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import {
@@ -6,6 +7,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+
+// Component Modules
 import App from "./App";
 
 const ManageAccountPage = lazy(() => import("./pages/ManageAccountPage"));
@@ -21,7 +24,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />} errorElement={<p>Error Occured</p>}>
       <Route index element={<HomePage />}></Route>
-      <Route path="blog/:blogId" element={<BlogPage />}></Route>
+      <Route path="blog/:blogID" element={<BlogPage />}></Route>
       <Route path="admin" element={<AdminAuthPage />}></Route>
       <Route path="manage-account" element={<ManageAccountPage />}>
         <Route index element={<ProfileSetting />} />

@@ -1,4 +1,3 @@
-@use "./variable";
 @use "../../layouts/manage_account_aside/manageAccountAside";
 @use "../../features/profile_setting/profileSetting";
 @use "../../features/user_blogs/userBlogs";
@@ -27,7 +26,7 @@
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 850px) {
   #manage-account {
     padding: 8em 0em 8em 0em;
   }

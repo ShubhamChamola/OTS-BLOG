@@ -9,17 +9,35 @@ button {
   outline: none;
   border: 1.5px solid transparent;
   color: var(--primary-color);
-  transition: all linear 0.3s;
+  transition: all ease-in-out 0.3s;
   background-color: transparent;
+}
+
+body.light .solid-btn:hover {
+  color: var(--white);
+  background: rgba(243, 95, 68, 0.7);
+}
+body.light .outlined-btn:hover {
+  color: var(--white);
 }
 
 .outlined-btn {
   border-color: var(--action-color);
+  color: var(--action-color);
+  &:hover {
+    background-color: var(--action-color);
+    color: var(--primary-color);
+  }
 }
 
 .solid-btn {
   background: var(--action-color);
   color: var(--white);
+
+  &:hover {
+    background: var(--primary-color);
+    color: var(--action-color);
+  }
 }
 
 @media screen and (max-width: 850px) {
@@ -34,9 +52,10 @@ button {
     border-radius: 0;
     padding-bottom: 3px;
     border-bottom: 1px solid var(--primary-color);
+    color: var(--primary-color) !important;
 
     &:hover {
-      color: var(--action-color);
+      color: var(--action-color) !important;
     }
   }
 }

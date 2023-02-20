@@ -1,24 +1,35 @@
+// React Modules
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Utility Modules
 import { emailValidator, passwordValidator } from "../utils/validators";
+
+// Assets Modules
 import BackArrowSVG from "../assets/icons/BackArrowSVG";
 import MailSVG from "../assets/icons/MailSVG";
 import VisibleSVG from "../assets/icons/VisibleSVG";
+
+// Component Modules
 import Button from "../components/ui/Button";
 import Container from "../components/ui/Container";
+
+// CSS Modules
 import "../assets/styles/adminAuthPage.scss";
-import { useNavigate } from "react-router-dom";
-import useAuthStore from "../store/useAuthStore";
+
+// Service Modules
 import emailLogIn from "../services/auth/emailLogIn";
+import useUserInfoStore from "../store/useUserInfoStore";
 
 const AdminAuthPage: React.FC = () => {
   const navigate = useNavigate();
-  const userId = useAuthStore((state) => state.userId);
+  const { userID, role } = useUserInfoStore((store) => store.info);
 
   useEffect(() => {
-    if (userId) {
+    if (role === "User" || userID) {
       navigate(-1);
     }
-  }, [userId]);
+  }, [role, userID]);
 
   const [formValues, setFormValues] = useState<{
     email: string | null;
@@ -110,7 +121,7 @@ const AdminAuthPage: React.FC = () => {
           <BackArrowSVG />
           <span>Back To Home</span>
         </div>
-        <h3>Admin Sign In</h3>
+        <h3>Admin Log In</h3>
         <form>
           <div>
             <label htmlFor="email">Email</label>

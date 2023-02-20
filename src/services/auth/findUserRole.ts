@@ -1,23 +1,54 @@
+// Firebase Modules
 import { getDoc, doc } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
-import useAuthStore from "../../store/useAuthStore";
+import useLoaderStore from "../../store/useLoaderStore";
 
-export default async function findUserRole(uid: string) {
-  const adminInfoDoc = await getDoc(doc(firestoreDB, "admins", uid));
+// Store Module
+import addUserInfo from "./addUserInfo";
+import getUserInfo from "./getUserInfo";
 
-  if (adminInfoDoc.exists()) {
-    console.log("user exist and has a role of ADMIN");
-    useAuthStore.setState({ role: "Admin", userId: uid });
-    return true;
-  } else {
-    const userInfoDoc = await getDoc(doc(firestoreDB, "users", uid));
-    if (userInfoDoc.exists()) {
-      console.log("user exist and has a role of USER");
-      useAuthStore.setState({ role: "User", userId: uid });
-      return true;
-    } else {
-      console.log("user doesn't exist, adding user info...");
-      return false;
+// Custom Types
+interface AuthUserType {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+}
+
+export default async function findUserRole(user: AuthUserType) {
+  try {
+    const { uid: userID } = user;
+
+    const userInfoDoc = await getDoc(doc(firestoreDB, "users", userID));
+
+    switch (userInfoDoc.exists()) {
+      case true: {
+        console.log("Role => USER");
+        await getUserInfo(userID, "User");
+        break;
+      }
+      default: {
+        const adminInfoDoc = await getDoc(doc(firestoreDB, "admins", userID));
+
+        switch (adminInfoDoc.exists()) {
+          case true: {
+            console.log("Role => ADMIN");
+            await getUserInfo(userID, "Admin");
+            break;
+          }
+          default: {
+            console.log("Role => UNDEFINED", "New User");
+            addUserInfo(user);
+            break;
+          }
+        }
+      }
     }
+  } catch (error) {
+    console.log(error);
+    useLoaderStore.setState({
+      isLoading: false,
+      isFetchingInitialUserInfo: false,
+    });
   }
 }

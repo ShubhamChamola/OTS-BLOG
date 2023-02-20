@@ -1,86 +1,58 @@
+// Firebase Modules
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
-import { updateDoc, doc } from "firebase/firestore";
-import { firestoreDB, storage } from "../../lib/firebase";
-import useLoadingState from "../../store/useLoadState";
+import { storage } from "../../lib/firebase";
+import fileCompression from "./fileCompression";
 
+// This function take the file and upload it to storage and return the download url of the file(image)
 export default async function uploadImage(
-  imageFile: File,
-  fileName: string,
-  uid: string,
-  type: "user_avatar" | "admin_avatar" | "blog_thumbnail",
-  fileAddress?: string
+  file: File,
+  id: string,
+  type:
+    | "user_avatar"
+    | "admin_avatar"
+    | "blog_image/thumbnail"
+    | "blog_image/full_size"
 ) {
-  if (!useLoadingState.getState().isLoading) {
-    useLoadingState.setState({ isLoading: true });
-  }
-  const uploadTask = uploadBytesResumable(
-    ref(storage, `${fileAddress ? fileAddress : `${type}/${fileName}`}`),
-    imageFile
-  );
-  // Listen for state changes, errors, and completion of the upload.
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log("Upload is " + progress + "% done");
-      switch (snapshot.state) {
-        case "paused":
-          console.log("Upload is paused");
-          break;
-        case "running":
-          console.log("Upload is running");
-          break;
-      }
-    },
-    (error) => {
-      useLoadingState.setState({ isLoading: false });
-      switch (error.code) {
-        case "storage/unauthorized":
-          // User doesn't have permission to access the object
-          break;
-        case "storage/canceled":
-          // User canceled the upload
-          break;
-        // ...
-        case "storage/unknown":
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-        if (type === "user_avatar") {
-          console.log(downloadURL);
-          await updateDoc(doc(firestoreDB, "users", uid), {
-            avatar: downloadURL,
-            avatarFileAddress: `${type}/${fileName}`,
-          }).then(() => {
-            useLoadingState.setState({ isLoading: false });
-            if (window.location.pathname !== "/manage-account")
-              window.location.reload();
-          });
-        } else if (type === "admin_avatar") {
-          await updateDoc(doc(firestoreDB, "admins", uid), {
-            avatar: downloadURL,
-            avatarFileAddress: `${type}/${fileName}`,
-          }).then(() => {
-            useLoadingState.setState({ isLoading: false });
-            if (window.location.pathname !== "/manage-account")
-              window.location.reload();
-          });
-        } else if (type === "blog_thumbnail") {
-          await updateDoc(doc(firestoreDB, "blogs", uid), {
-            image: downloadURL,
-            fileAddress: `${type}/${fileName}`,
-          }).then(() => {
-            useLoadingState.setState({ isLoading: false });
-            return "done";
-          });
-        } else {
-          useLoadingState.setState({ isLoading: false });
-        }
+  return new Promise<String>((resolve, reject) => {
+    try {
+      fileCompression(file, type).then((compressedFile) => {
+        const uploadTask = uploadBytesResumable(
+          ref(storage, `${type}/${id}`),
+          compressedFile
+        );
+
+        // Listen for state changes, errors, and completion of the upload.
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+          },
+          (error) => {
+            switch (error.code) {
+              case "storage/unauthorized":
+                console.log(
+                  "User doesn't have permission to access the object"
+                );
+                break;
+              case "storage/canceled":
+                console.log("User canceled the upload");
+                break;
+              case "storage/unknown":
+                console.log("Unknown error occurred");
+                break;
+            }
+            reject(Error("File upload Failed"));
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
       });
+    } catch (error: any) {
+      throw new Error(error);
     }
-  );
+  });
 }

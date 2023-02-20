@@ -1,49 +1,92 @@
-import { useEffect, useState } from "react";
+// React Modules
+import { useEffect } from "react";
+
+// Component Modules
 import BlogTile from "../../components/global/BlogTile";
-import BlogTileSkeleton from "../../components/loaders/blog-tile-skeleton/BlogTileSkeleton";
+import BlogTileSkeleton from "../../skeleton/BlogTileSkeleton";
 import Button from "../../components/ui/Button";
+
+// Service Modules
 import fetchCategoryBlogs from "../../services/blog/fetchCategoryBlogs";
 import fetchTotalBlogs from "../../services/blog/fetchTotalBlogs";
-import useHomeBlogStore from "../../store/useHomeBlogStore";
+
+// Store Module
+import useHomeBlogStore from "../../store/useBlogBrowseStore";
 
 const Browse: React.FC = () => {
-  const category = useHomeBlogStore((state) => state.category);
-  const blogs = useHomeBlogStore((state) => state.blogs);
-  const totalBlogs = useHomeBlogStore((state) => state.noOfBlogs);
-
-  const [isFetching, setIsFetching] = useState(false);
+  const {
+    category,
+    blogs,
+    noOfBlogs: totalBlogs,
+    isFetching,
+  } = useHomeBlogStore((store) => store);
 
   useEffect(() => {
-    (async () => {
-      setIsFetching(true);
-      useHomeBlogStore.setState({ blogs: [], noOfBlogs: 0, lastDocSnap: null });
-      await fetchTotalBlogs(category);
-      await fetchCategoryBlogs(category);
-      setIsFetching(false);
-    })();
+    return () => {
+      useHomeBlogStore.setState({
+        lastDocSnap: null,
+        noOfBlogs: 0,
+        blogs: [],
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    useHomeBlogStore.setState({
+      lastDocSnap: null,
+      noOfBlogs: 0,
+      blogs: [],
+      isFetching: true,
+    });
+    fetchTotalBlogs(category);
   }, [category]);
+
+  useEffect(() => {
+    totalBlogs > 0 && fetchCategoryBlogs(category);
+  }, [totalBlogs]);
 
   return (
     <>
-      {isFetching && blogs && blogs.length === 0 ? (
+      {isFetching && blogs.length < 1 ? (
         <article id="blog-browse">
+          <BlogTileSkeleton />
+          <BlogTileSkeleton />
           <BlogTileSkeleton />
           <BlogTileSkeleton />
         </article>
       ) : (
         <article id="blog-browse">
           {blogs && blogs.length >= 1 ? (
-            blogs.map((blogData) => (
-              <BlogTile
-                key={blogData.blogId}
-                blogId={blogData.blogId}
-                title={blogData.title}
-                date={blogData.createdAt}
-                readTime={blogData.readTime}
-                category={blogData.category}
-                image={blogData.image}
-              />
-            ))
+            !isFetching ? (
+              <>
+                {blogs.map((blogData) => (
+                  <BlogTile
+                    key={blogData.blogID}
+                    blogID={blogData.blogID}
+                    title={blogData.title}
+                    createdAt={blogData.createdAt}
+                    readTime={blogData.readTime}
+                    category={blogData.category}
+                    thumbnail={blogData.thumbnail}
+                  />
+                ))}
+              </>
+            ) : (
+              <>
+                {blogs.map((blogData) => (
+                  <BlogTile
+                    key={blogData.blogID}
+                    blogID={blogData.blogID}
+                    title={blogData.title}
+                    createdAt={blogData.createdAt}
+                    readTime={blogData.readTime}
+                    category={blogData.category}
+                    thumbnail={blogData.thumbnail}
+                  />
+                ))}
+                <BlogTileSkeleton />
+              </>
+            )
           ) : (
             <div className="not-found">
               <h3>Blog Not Found</h3>
@@ -56,7 +99,7 @@ const Browse: React.FC = () => {
           <Button
             id="load-more"
             className="outlined-btn"
-            disabled={totalBlogs === blogs?.length ? true : false}
+            disabled={totalBlogs === blogs.length || isFetching ? true : false}
             onClick={(
               event: React.MouseEvent<HTMLButtonElement, MouseEvent>
             ) => {

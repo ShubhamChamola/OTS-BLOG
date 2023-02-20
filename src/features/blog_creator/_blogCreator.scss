@@ -10,6 +10,10 @@
   column-gap: 10em;
   padding-top: 8em;
 
+  #note-image {
+    position: absolute;
+  }
+
   @for $i from 1 through 5 {
     label:nth-child(7n) {
       grid-row: $i;
@@ -101,6 +105,7 @@
       background-size: cover !important;
       background-repeat: no-repeat !important;
     }
+
     label {
       font-size: 0.9rem;
       font-weight: 700;
@@ -108,8 +113,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: var(--secondary-color);
-      background: var(--tertiary-bg);
+      color: var(--white);
+      background: rgba(37, 38, 39, 0.9);
       padding: 0.65em 1em;
       border-radius: 44px;
       cursor: pointer;

@@ -1,14 +1,23 @@
+// Component Module
 import Button from "../../../components/ui/Button";
-import { auth } from "../../../lib/firebase";
-import { signOut } from "firebase/auth";
-import formatUserName from "../utils/formatName";
+
+// Default Module
 import { useNavigate } from "react-router-dom";
+
+// Custom Modules
+import formatUserName from "../utils/formatName";
+import signOutUser from "../../../services/auth/signOutUser";
+
+// Store Module
 import useUserInfoStore from "../../../store/useUserInfoStore";
 
+const dummyUserAvatar =
+  require("../../../assets/images/user-dummy-avatar.png") as string;
+
 const SignedInLinks: React.FC = () => {
-  const firstName = useUserInfoStore((state) => state.firstName);
-  const lastName = useUserInfoStore((state) => state.lastName);
-  const avatar = useUserInfoStore((state) => state.avatar);
+  const { firstName, lastName, avatar } = useUserInfoStore(
+    (state) => state.info!
+  );
 
   const navigate = useNavigate();
 
@@ -21,15 +30,16 @@ const SignedInLinks: React.FC = () => {
             navigate("/manage-account");
           }}
         >
-          <div style={{ background: `url(${avatar})` }}></div>
+          <div
+            style={{ background: `url(${avatar || dummyUserAvatar})` }}
+          ></div>
           <span>{formatUserName(firstName, lastName)}</span>
         </div>
       </li>
       <li>
         <Button
-          id="sign-out"
-          onClick={async () => {
-            await signOut(auth);
+          onClick={() => {
+            signOutUser();
           }}
           className="outlined-btn"
         >

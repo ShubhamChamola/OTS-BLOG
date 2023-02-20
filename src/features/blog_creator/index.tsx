@@ -1,10 +1,17 @@
-import Button from "../../components/ui/Button";
+// React Modules
 import { useState, useRef, useEffect } from "react";
+
+// Component Module
+import Button from "../../components/ui/Button";
+
+// Utility Modules
 import {
   textValidator,
   numberValidator,
   categoryValidator,
 } from "../../utils/validators";
+
+// Service Module
 import addBlogToDB from "../../services/blog/addBlogToDB";
 
 interface BlogData {
@@ -17,7 +24,7 @@ interface BlogData {
 }
 
 const dummyBlogImg =
-  require("../../assets/images/dummy_blog_img.jpg") as string;
+  require("../../assets/images/default_blog_image.jpg") as string;
 
 const BlogCreator: React.FC = () => {
   const [formValues, setFormValues] = useState<BlogData>({
@@ -209,7 +216,7 @@ const BlogCreator: React.FC = () => {
         name="blogTitle"
         id="blog-title"
         value={formValues.blogTitle ? formValues.blogTitle : ""}
-        placeholder="Enter the blog title"
+        placeholder="Enter blog title"
         ref={blogTitleRef}
       />
 
@@ -233,7 +240,7 @@ const BlogCreator: React.FC = () => {
         name="blogIntro"
         id="blog-intro"
         value={formValues.blogIntro ? formValues.blogIntro : ""}
-        placeholder="Enter blog introduction"
+        placeholder="Enter blog description"
         ref={blogIntroRef}
       />
 
@@ -258,7 +265,7 @@ const BlogCreator: React.FC = () => {
         name="categories"
         id="blog-category"
         value={formValues.blogCategory ? formValues.blogCategory : ""}
-        placeholder="Select one blog category"
+        placeholder="Select blog category"
         ref={blogCategoryRef}
       />
       <datalist id="blog-categories">
@@ -272,6 +279,7 @@ const BlogCreator: React.FC = () => {
 
       {/* blog image */}
       <label htmlFor="blog-image">Blog Image</label>
+
       <div className="img-field">
         <input
           onChange={(event) => {
@@ -285,7 +293,8 @@ const BlogCreator: React.FC = () => {
           type="file"
           name="blogImage"
           id="blog-image"
-          accept=".jpg, .png, .jpeg, .svg"
+          accept=".jpg, .png, .jpeg"
+          max={10485760}
         />
         <div
           className="selected-img"
@@ -298,6 +307,9 @@ const BlogCreator: React.FC = () => {
           }}
         ></div>
         <label htmlFor="blog-image">Upload Photo</label>
+        <p id="note-image">
+          Please first fill all the other input fields and then select image.
+        </p>
       </div>
 
       {/* read time */}

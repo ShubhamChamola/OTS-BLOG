@@ -1,10 +1,17 @@
-import ReactDOM from "react-dom";
-import googleAuth from "../../services/auth/googleAuth";
+// Component Modules
 import Container from "../../components/ui/Container";
 import Button from "../../components/ui/Button";
+
+// Default Module
+import ReactDOM from "react-dom";
+
+// Assets Modules
 import CloseSVG from "../../assets/icons/CloseSVG";
 import GoogleSVG from "../../assets/icons/GoogleSVG";
 import FaceBookSVG from "../../assets/icons/FaceBookSVG";
+
+// Service Modules
+import googleAuth from "../../services/auth/googleAuth";
 
 interface Props {
   changeModalState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,7 +43,6 @@ const AuthModal: React.FC<Props> = ({ changeModalState }) => {
         <p>Sign in to enjoy the full benefits of our services</p>
         <div className="btns">
           <Button
-            id="google-auth"
             onClick={() => {
               googleAuth();
             }}
@@ -47,7 +53,6 @@ const AuthModal: React.FC<Props> = ({ changeModalState }) => {
             <span>Google</span>
           </Button>
           <Button
-            id="facebook-auth"
             onClick={() => {
               console.log("facebook auth");
             }}

@@ -1,12 +1,25 @@
-import OTSLogo from "../../../assets/icons/OTSLogo";
-import "./pageLoader.scss";
+// React Module
+import { useLocation } from "react-router-dom";
+import BlogPage from "../../../skeleton/BlogPage";
 
-export default function PageLoader() {
+// Component Module
+import HomePage from "../../../skeleton/HomePage";
+import ManageAccountPage from "../../../skeleton/ManageAccountPage";
+
+interface TypeProp {
+  removeAside?: boolean;
+}
+
+export default function PageLoader({ removeAside }: TypeProp) {
+  const { pathname } = useLocation();
+
   return (
-    <section id="page-loader">
-      <div>
-        <OTSLogo />
-      </div>
-    </section>
+    <>
+      {pathname === "/" && <HomePage />}
+      {pathname.includes("/manage-account") && (
+        <ManageAccountPage removeAside={removeAside} />
+      )}
+      {pathname.includes("/blog") && <BlogPage />}
+    </>
   );
 }

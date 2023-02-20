@@ -1,72 +1,65 @@
+// React Modules
+import { useState, useEffect } from "react";
+
+// Component Modules
 import BlogContentBase from "./components/BlogContentBase";
 import BlogInteraction from "./components/BlogInteraction";
-import { useState, useEffect } from "react";
-import fetchBlogInfo from "../../services/blog/fetchBlogInfo";
-import { useParams } from "react-router-dom";
-import fetchWritterInfo from "../../services/blog/fetchWritterInfo";
-import SimilarBlogs from "./components/SimilarBlogs";
+import { WritterInfo } from "../../skeleton/BlogPage";
 
-interface BlogData {
-  blogId: string;
+// Service Modules
+import fetchWritterInfo from "../../services/blog/fetchWritterInfo";
+
+interface BlogDataType {
   title: string;
-  category: string;
   intro: string;
-  image: string | null;
+  fullSizeImage: string | null;
   body: string;
-  createdAt: Date;
-  writterId: string;
+  createdAt: { seconds: number };
+  writterID: string;
 }
 
-interface WritterData {
+interface WritterDataType {
   firstName: string;
   lastName: string;
   bio: string;
   avatar: string;
-  writtenAt: Date;
 }
 
-console.log("oskfnskfn");
+const dummyBlogImage =
+  require("../../assets/images/default_blog_image.jpg") as string;
 
-const dummyBlogImage = require("../../assets/images/default_blog_image.jpg")!;
+const BlogContent: React.FC<BlogDataType> = ({
+  title,
+  intro,
+  fullSizeImage,
+  body,
+  createdAt,
+  writterID,
+}: BlogDataType) => {
+  const [writterInfo, setWritterInfo] = useState<WritterDataType | null>(null);
 
-const BlogContent: React.FC = () => {
-  const { blogId } = useParams();
-
-  const [blogData, setBlogData] = useState<BlogData | null>(null);
-  const [writterInfo, setWritterInfo] = useState<WritterData | null>(null);
-
+  // This useEffect is responsible for fetching info of the writter of the blog
   useEffect(() => {
-    (async () => {
-      const data = await fetchBlogInfo(blogId!);
-      setBlogData(data as BlogData);
-
-      const writter = await fetchWritterInfo(data.writterId);
-
-      setWritterInfo({ ...writter, writtenAt: data.createdAt });
-    })();
-  }, [blogId]);
+    fetchWritterInfo(writterID, setWritterInfo);
+  }, []);
 
   return (
     <article id="specific-blog">
-      {blogData ? (
-        <>
-          <h2>{blogData.title}</h2>
-          <BlogInteraction />
-          <p>{blogData.intro}</p>
-          <div id="blog-image">
-            <img
-              src={blogData.image || dummyBlogImage}
-              alt="related to the blog"
-            />
-          </div>
-          {blogData.body.split("\n\n").map((para, index) => (
-            <p key={para.slice(0, 10) + index}>{para}</p>
-          ))}
-          {writterInfo && <BlogContentBase {...writterInfo} />}
-          <SimilarBlogs category={blogData.category} />
-        </>
+      <h2>{title}</h2>
+      <BlogInteraction />
+      <p>{intro}</p>
+      <div id="blog-image">
+        <img src={fullSizeImage || dummyBlogImage} alt="related to the blog" />
+      </div>
+      {body.split("\n\n").map((para, index) => (
+        <p key={para.slice(0, 10) + index}>{para}</p>
+      ))}
+      {writterInfo ? (
+        <BlogContentBase {...writterInfo} createdAt={createdAt} />
       ) : (
-        "This Blog Doesn't exist in the Database"
+        <>
+          <WritterInfo />
+        </>
       )}
     </article>
   );

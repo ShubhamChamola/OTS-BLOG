@@ -1,24 +1,25 @@
+// React Modules
 import { useEffect, useState } from "react";
-import ArrowSVG from "../../assets/icons/ArrowSVG";
-import BlogMinTileSkeleton from "../../components/loaders/blog-min-tile-skeleton/BlogMinTileSkeleton";
-import fetchLikedBlogs from "../../services/blog/fetchLikedBlogs";
 import BlogMinimalTile from "./components/BlogMinimalTile";
+import BlogMinTileSkeleton from "../../skeleton/BlogMinimalTileSkeleton";
 
-interface Blog {
+// Service Mdoules
+import fetchLikedBlogs from "../../services/blog/fetchLikedBlogs";
+
+interface BlogType {
   title: string;
-  createdAt: Date;
-  blogId: string;
+  createdAt: { seconds: number };
+  blogID: string;
   readTime: number;
 }
 
 const LikedByOthers: React.FC = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-
+  const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-
   const [initialFetchRun, setInitialFetchRun] = useState(false);
 
   useEffect(() => {
+    setIsFetching(true);
     fetchLikedBlogs(setBlogs, setIsFetching);
     setInitialFetchRun(true);
   }, []);
@@ -26,18 +27,18 @@ const LikedByOthers: React.FC = () => {
   return (
     <>
       {initialFetchRun && !isFetching && blogs.length > 0 ? (
-        <article id="liked-blogs">
+        <div id="liked-blogs">
           <h4>Liked by others</h4>
-          {blogs.map(({ title, readTime, createdAt, blogId }) => (
+          {blogs.map(({ title, readTime, createdAt, blogID }) => (
             <BlogMinimalTile
-              key={blogId}
+              key={blogID}
               title={title}
               readTime={readTime}
               createdAt={createdAt}
-              blogId={blogId}
+              blogID={blogID}
             />
           ))}
-        </article>
+        </div>
       ) : isFetching ? (
         <BlogMinTileSkeleton />
       ) : null}

@@ -1,3 +1,4 @@
+// Firebase Modules
 import {
   collection,
   addDoc,
@@ -7,10 +8,15 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
-import useAuthStore from "../../store/useAuthStore";
+
+// Service Module
 import uploadImage from "../uploadFile/uploadImage";
 
-interface Data {
+// Store Module
+import useUserInfoStore from "../../store/useUserInfoStore";
+import useLoaderStore from "../../store/useLoaderStore";
+
+interface BlogDataType {
   title: string;
   intro: string;
   category: string;
@@ -19,41 +25,55 @@ interface Data {
   body: string;
 }
 
-export default async function addBlogToDB(data: Data) {
+export default async function addBlogToDB(data: BlogDataType) {
   try {
-    const { userId, role } = useAuthStore.getState();
+    useLoaderStore.setState({ isLoading: true });
+    const { userID, role } = useUserInfoStore.getState().info;
 
-    if (role === "Admin" && userId) {
+    if (role === "Admin" && userID) {
       const blogRef = await addDoc(collection(firestoreDB, "blogs"), {
         title: data.title,
         intro: data.intro,
         category: data.category,
         readTime: data.readTime,
         body: data.body,
-        writterId: userId,
+        writterID: userID,
         createdAt: serverTimestamp(),
-        likedUsers: [],
         likes: 0,
       });
 
       if (data.image) {
-        console.log("here");
-        const fileName = `${data.image.name}-${new Date().getTime()}`;
-        await uploadImage(data.image, fileName, blogRef.id, "blog_thumbnail");
-        await updateDoc(doc(firestoreDB, "admins", userId), {
+        const thumbnail = await uploadImage(
+          data.image,
+          blogRef.id,
+          "blog_image/thumbnail"
+        );
+        const fullSizeImage = await uploadImage(
+          data.image,
+          blogRef.id,
+          "blog_image/full_size"
+        );
+
+        await updateDoc(doc(firestoreDB, "blogs", blogRef.id), {
+          fullSizeImage: fullSizeImage,
+          thumbnail: thumbnail,
+        });
+
+        await updateDoc(doc(firestoreDB, "admins", userID), {
           createdBlogs: arrayUnion(blogRef.id),
         });
-        console.log("now site should reload");
+        useLoaderStore.setState({ isLoading: false });
         window.history.back();
       } else {
-        console.log("else");
-        await updateDoc(doc(firestoreDB, "admins", userId), {
+        await updateDoc(doc(firestoreDB, "admins", userID), {
           createdBlogs: arrayUnion(blogRef.id),
         });
+        useLoaderStore.setState({ isLoading: false });
         window.history.back();
       }
     } else {
-      throw "You dont have the rights to create a blog";
+      useLoaderStore.setState({ isLoading: false });
+      throw new Error("You dont have rights to create a blog");
     }
   } catch (error) {
     console.log(error);

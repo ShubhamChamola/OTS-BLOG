@@ -1,9 +1,15 @@
+// React Modules
 import { useEffect, useState } from "react";
+
+// Assets Module
 import ArrowSVG from "../../assets/icons/ArrowSVG";
-import useHomeBlogStore from "../../store/useHomeBlogStore";
+
+// Store Module
+import useHomeBlogStore from "../../store/useBlogBrowseStore";
 
 const BlogCategories: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("All-Blogs");
+  const { isFetching } = useHomeBlogStore((state) => state);
 
   useEffect(() => {
     const allLinks = document.querySelectorAll("#set-categories ul li");
@@ -15,8 +21,15 @@ const BlogCategories: React.FC = () => {
     }
   }, [activeCategory]);
 
+  useEffect(() => {
+    return () => {
+      useHomeBlogStore.setState({ category: "All Blogs" });
+      setActiveCategory("All-blogs");
+    };
+  }, []);
+
   return (
-    <article id="set-categories">
+    <div id="set-categories">
       <h4
         onClick={(event) => {
           event.currentTarget.parentElement?.classList.toggle("active");
@@ -31,8 +44,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="All-Blogs"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "All Blogs" });
-            setActiveCategory("All-Blogs");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "All Blogs" });
+              setActiveCategory("All-Blogs");
+            }
           }}
         >
           All Blogs
@@ -40,8 +55,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="Bike-Reviews"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Bike Reviews" });
-            setActiveCategory("Bike-Reviews");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Bike Reviews" });
+              setActiveCategory("Bike-Reviews");
+            }
           }}
         >
           Bike Review
@@ -49,8 +66,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="Travel-&-Tips"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Travel & Tips" });
-            setActiveCategory("Travel-&-Tips");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Travel & Tips" });
+              setActiveCategory("Travel-&-Tips");
+            }
           }}
           className="active"
         >
@@ -59,8 +78,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="Parts-&-Accessories"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Parts & Accessories" });
-            setActiveCategory("Parts-&-Accessories");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Parts & Accessories" });
+              setActiveCategory("Parts-&-Accessories");
+            }
           }}
         >
           Parts & Accessories
@@ -68,8 +89,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="Latest-News"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Latest News" });
-            setActiveCategory("Latest-News");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Latest News" });
+              setActiveCategory("Latest-News");
+            }
           }}
         >
           Latest News
@@ -77,8 +100,10 @@ const BlogCategories: React.FC = () => {
         <li
           id="Maintenance"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Maintenance" });
-            setActiveCategory("Maintenance");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Maintenance" });
+              setActiveCategory("Maintenance");
+            }
           }}
         >
           Maintenance
@@ -86,14 +111,16 @@ const BlogCategories: React.FC = () => {
         <li
           id="Luxury-Bikes"
           onClick={() => {
-            useHomeBlogStore.setState({ category: "Luxury Bikes" });
-            setActiveCategory("Luxury-Bikes");
+            if (!isFetching) {
+              useHomeBlogStore.setState({ category: "Luxury Bikes" });
+              setActiveCategory("Luxury-Bikes");
+            }
           }}
         >
           Luxury Bikes
         </li>
       </ul>
-    </article>
+    </div>
   );
 };
 

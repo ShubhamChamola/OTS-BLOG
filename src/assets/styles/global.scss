@@ -5,6 +5,7 @@
 @use "blog_tile";
 @use "../../layouts/navigation/navigation";
 @use "../../layouts/footer/footer";
+@use "../../skeleton/skeleton.scss";
 
 *,
 *::before,
@@ -12,20 +13,27 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
-  transition: background-color 0.25s linear 0.25s, color 0.15s linear 0s;
 }
 
 html {
   font-family: var(--primary-font);
-
   font-size: clamp(20px, 5vw, 16px);
+  scroll-behavior: smooth !important;
 }
 
 body {
   overflow-x: hidden !important;
   color: var(--primary-color);
+  scroll-behavior: smooth !important;
+
   &::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
+  }
+
+  &.light {
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(109, 125, 139, 0.6);
+    }
   }
 
   &::-webkit-scrollbar-track {
@@ -34,10 +42,11 @@ body {
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--grey);
-    border-radius: 16px;
+    background-color: rgba(222, 222, 222, 0.3);
+    border-radius: 6px;
   }
 }
+
 header {
   background: var(--primary-bg);
 }
@@ -48,6 +57,11 @@ ul {
 
 button {
   width: fit-content;
+
+  &:disabled {
+    cursor: none;
+    pointer-events: none;
+  }
 }
 
 svg {

@@ -1,3 +1,4 @@
+// Firebase Modules
 import {
   runTransaction,
   doc,
@@ -5,27 +6,20 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
+import useUserInfoStore from "../../store/useUserInfoStore";
 
-export default async function bookmarkBlog(userId: string, blogId: string) {
+export default async function bookmarkBlog(userID: string, blogID: string) {
   try {
-    const userDocRef = doc(firestoreDB, "users", userId);
+    const { blogIDs } = useUserInfoStore.getState().info;
 
     await runTransaction(firestoreDB, async (transaction) => {
-      const bookmarkedBlogs = await transaction.get(userDocRef).then((doc) => {
-        if (doc.exists()) {
-          return doc.data().bookmarkedBlogs;
-        } else {
-          return [];
-        }
-      });
-
-      if (bookmarkedBlogs.includes(blogId)) {
-        transaction.update(doc(firestoreDB, "users", userId), {
-          bookmarkedBlogs: arrayRemove(blogId),
+      if (blogIDs.includes(blogID)) {
+        transaction.update(doc(firestoreDB, "users", userID), {
+          blogIDs: arrayRemove(blogID),
         });
       } else {
-        transaction.update(doc(firestoreDB, "users", userId), {
-          bookmarkedBlogs: arrayUnion(blogId),
+        transaction.update(doc(firestoreDB, "users", userID), {
+          blogIDs: arrayUnion(blogID),
         });
       }
     });

@@ -1,54 +1,49 @@
-import Button from "../../components/ui/Button";
+// React Module
 import { useState, useEffect, useRef } from "react";
-import { nameValidator, bioValidator } from "../../utils/validators";
-import useAuthStore from "../../store/useAuthStore";
-import updateProfile from "../../services/manageAccount/updateprofile";
-import useUserInfoStore from "../../store/useUserInfoStore";
-import useLoadingState from "../../store/useLoadState";
-import ComponentLoader from "../../components/loaders/component_loader/ComponentLoader";
 
-interface AdminInfoType {
-  firstName: string | null;
-  lastName: string | null;
-  avatar: string | null;
-  avatarFileAddress: string | null;
-  bio: string | null;
-  blogs: string[];
-}
-interface UserInfoType {
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  avatar: string | null;
-  avatarFileAddress: string | null;
-  blogs: string[];
-}
+// Component Modules
+import Button from "../../components/ui/Button";
+
+// Util Modules
+import { nameValidator, bioValidator } from "../../utils/validators";
+
+// Service Modules
+import updateProfile from "../../services/manageAccount/updateprofile";
+
+// Store Modules
+import useUserInfoStore from "../../store/useUserInfoStore";
+
+const dummyAvatar =
+  require("../../assets/images/user-dummy-avatar.png") as string;
 
 const ProfileSetting: React.FC = () => {
-  const role = useAuthStore((state) => state.role);
-  const prevUserInfo = useUserInfoStore((state) => state);
-
-  const { isLoading } = useLoadingState((state) => state);
+  const {
+    firstName: prevFirstName,
+    lastName: prevLastName,
+    avatar: prevAvatar,
+    bio: prevBio,
+    role,
+  } = useUserInfoStore((state) => state.info);
 
   const [formValues, setFormValues] = useState<{
     firstName: string | null;
     lastName: string | null;
-    bio: string | null;
     avatar: File | string | null;
+    bio: string | null;
   }>({
-    firstName: prevUserInfo.firstName,
-    lastName: prevUserInfo.lastName,
-    bio: role === "Admin" ? (prevUserInfo as AdminInfoType).bio : null,
-    avatar: prevUserInfo.avatar,
+    firstName: prevFirstName,
+    lastName: prevLastName,
+    avatar: prevAvatar,
+    bio: prevBio || null,
   });
-
-  const [avatarChanged, setAvatarChanged] = useState(false);
 
   const [formValidation, setFormValidation] = useState({
     isFirstNameValid: false,
     isLastNameValid: false,
     isBioValid: false,
   });
+
+  const [avatarChanged, setAvatarChanged] = useState(false);
 
   const [bubbleTimer, setBubbleTimer] = useState<null | NodeJS.Timeout>(null);
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -128,14 +123,9 @@ const ProfileSetting: React.FC = () => {
       formValidation.isFirstNameValid &&
       formValidation.isLastNameValid &&
       (avatarChanged ||
-        formValues.firstName?.toLowerCase() !==
-          prevUserInfo.firstName?.toLowerCase() ||
-        formValues.lastName?.toLowerCase() !==
-          prevUserInfo.lastName?.toLowerCase() ||
-        (role === "Admin" &&
-          formValues.bio &&
-          formValues.bio !==
-            (useUserInfoStore.getState() as AdminInfoType).bio))
+        formValues.firstName?.toLowerCase() !== prevFirstName?.toLowerCase() ||
+        formValues.lastName?.toLowerCase() !== prevLastName?.toLowerCase() ||
+        (role === "Admin" && formValues.bio && formValues.bio !== prevBio))
     ) {
       setBtnDisabled(false);
     } else {
@@ -146,17 +136,16 @@ const ProfileSetting: React.FC = () => {
     formValidation.isLastNameValid,
     formValidation.isBioValid,
     role,
-    prevUserInfo.firstName,
-    prevUserInfo.lastName,
+    prevFirstName,
+    prevLastName,
+    prevBio,
     formValues.firstName,
     formValues.lastName,
     formValues.bio,
     avatarChanged,
   ]);
 
-  return isLoading ? (
-    <ComponentLoader />
-  ) : (
+  return (
     <form id="profile-setting">
       <div className="input-container">
         <label htmlFor="first-name">First Name</label>
@@ -250,7 +239,7 @@ const ProfileSetting: React.FC = () => {
                   ? typeof formValues.avatar === "string"
                     ? formValues.avatar
                     : URL.createObjectURL(formValues.avatar)
-                  : ""
+                  : dummyAvatar
               })`,
             }}
           ></div>
@@ -270,7 +259,8 @@ const ProfileSetting: React.FC = () => {
             }
           }}
           type="file"
-          accept=".jpg, .png, .jpeg, .svg"
+          accept=".jpg, .png, .jpeg"
+          max={10485760}
           name="userAvatar"
           id="user-avatar"
         />
@@ -284,7 +274,12 @@ const ProfileSetting: React.FC = () => {
         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           event.preventDefault();
           handleFormSubmission(
-            { bio: null, ...prevUserInfo },
+            {
+              bio: null,
+              firstName: prevFirstName,
+              lastName: prevLastName,
+              avatar: prevAvatar,
+            },
             formValues,
             avatarChanged
           );
@@ -321,6 +316,9 @@ function handleFormSubmission(
   if (currValue.bio && prevValue.bio !== currValue.bio)
     needUpdate["bio"] = currValue.bio;
 
-  if (avatarChanged) updateProfile(needUpdate, currValue.avatar as File);
-  updateProfile(needUpdate);
+  if (avatarChanged) {
+    updateProfile(needUpdate, currValue.avatar as File);
+  } else {
+    updateProfile(needUpdate);
+  }
 }

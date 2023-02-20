@@ -1,60 +1,53 @@
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import useAuthStore from "./useAuthStore";
 
-const role = useAuthStore.getState().role;
-
-interface AdminInfoType {
-  firstName: string | null;
-  lastName: string | null;
-  avatar: string | null;
-  avatarFileAddress: string | null;
-  bio: string | null;
-  blogs: string[];
-
-  clearStore: () => void;
-}
 interface UserInfoType {
+  role: "User" | "Admin" | null;
+  userID: string | null;
   firstName: string | null;
   lastName: string | null;
-  email: string | null;
   avatar: string | null;
-  avatarFileAddress: string | null;
-  blogs: string[];
-
-  clearStore: () => void;
+  blogIDs: string[];
+  likedBlogs: string[];
+  bio?: string | null;
+  email?: string | null;
 }
 
-let initialAdminInfoState = {
+interface InfoStoreType {
+  info: UserInfoType;
+  detachListener: (() => void) | null;
+  clearInfo: () => void;
+}
+
+let initialState = {
+  role: null,
+  userID: null,
   firstName: null,
   lastName: null,
   avatar: null,
-  avatarFileAddress: null,
-  bio: null,
-  blogs: [],
-};
-
-let initialUserInfoState = {
-  firstName: null,
-  lastName: null,
+  blogIDs: [],
   email: null,
-  avatar: null,
-  avatarFileAddress: null,
-  blogs: [],
+  bio: null,
+  likedBlogs: [],
 };
 
-const useStore = create<AdminInfoType | UserInfoType>()(
-  devtools((set) =>
-    role === "Admin"
-      ? {
-          ...initialAdminInfoState,
-          clearStore: () => set(initialAdminInfoState),
-        }
-      : {
-          ...initialUserInfoState,
-          clearStore: () => set(initialUserInfoState),
-        }
-  )
+const useStore = create<InfoStoreType>()(
+  devtools((set) => {
+    return {
+      info: initialState,
+
+      detachListener: null,
+
+      clearInfo: () =>
+        set((state) => {
+          return {
+            ...state,
+            info: initialState,
+            detachListener: null,
+          };
+        }),
+    };
+  })
 );
 
 const useUserInfoStore = useStore;

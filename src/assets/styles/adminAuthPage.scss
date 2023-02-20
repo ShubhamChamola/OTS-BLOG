@@ -1,5 +1,3 @@
-@use "./variable";
-
 #admin-auth {
   width: 100%;
   display: flex;
@@ -7,11 +5,12 @@
   justify-content: center;
   background: var(--secondary-bg);
   width: 100%;
-  height: 90vh;
+  height: fit-content;
+  padding: 4em 0;
 
   #admin-container {
     width: 400px;
-    height: 550px;
+    height: fit-content;
     border-radius: 16px;
     background: var(--tertiary-bg);
     padding: 2em 1.5em;
@@ -149,6 +148,27 @@
           pointer-events: none;
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: 850px) {
+  #admin-auth {
+    padding-top: 8em;
+    button {
+      color: var(--off-black) !important;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  #admin-auth {
+    padding: 0;
+
+    #admin-container {
+      padding: 8em 0 3em 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
     }
   }
 }

@@ -1,0 +1,50 @@
+body.dark #initial-loader {
+  background-color: #252627;
+}
+body.light #initial-loader {
+  background-color: #ffff;
+}
+
+#initial-loader {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #252627;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  z-index: 5;
+}
+
+#initial-loader > svg {
+  width: 95%;
+  max-width: 700px;
+  display: block;
+}
+
+#initial-loader > svg path {
+  stroke: #f35f44;
+  fill: #f35f44;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  stroke-width: 3px;
+  animation: fill 2s ease infinite alternate;
+}
+
+@keyframes fill {
+  0% {
+    fill-opacity: 0;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    stroke-width: 3px;
+  }
+
+  100% {
+    stroke-dashoffset: 0px;
+    stroke-width: 3px;
+    fill-opacity: 0.7;
+  }
+}

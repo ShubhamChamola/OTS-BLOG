@@ -1,16 +1,24 @@
-import Button from "../../../components/ui/Button";
-import AuthModal from "../../../features/auth_modal";
+// React Module
+import { useState, lazy, Suspense } from "react";
 
-import { useState } from "react";
+// Component Modules
+import Button from "../../../components/ui/Button";
+import UILoader from "../../../components/loaders/ui-loader/UILoader";
+
+const AuthModal = lazy(() => import("../../../features/auth_modal"));
 
 const SignedOutLinks: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
+      {showModal && (
+        <Suspense fallback={<UILoader />}>
+          <AuthModal changeModalState={setShowModal} />
+        </Suspense>
+      )}
       <li>
         <Button
-          id="sign-in-btn"
           onClick={() => {
             setShowModal(true);
           }}
@@ -21,7 +29,6 @@ const SignedOutLinks: React.FC = () => {
       </li>
       <li>
         <Button
-          id="book-service-nav"
           onClick={() => {
             console.log("Book a Service");
           }}
@@ -30,8 +37,6 @@ const SignedOutLinks: React.FC = () => {
           Book a Service
         </Button>
       </li>
-
-      {showModal && <AuthModal changeModalState={setShowModal} />}
     </>
   );
 };

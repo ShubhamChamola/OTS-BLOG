@@ -1,3 +1,4 @@
+// Component Modules
 import MailSVG from "../../../assets/icons/MailSVG";
 
 const NewsLetterSub: React.FC = () => {

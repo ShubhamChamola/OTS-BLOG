@@ -1,55 +1,58 @@
-import formatDate from "../../utils/formatDate";
-import { Link, useNavigate } from "react-router-dom";
+// React Modules
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// Store Module
 import useUserInfoStore from "../../store/useUserInfoStore";
+
+// Assets Modules
 import ActiveBookmarkSVG from "../../assets/icons/ActiveBookmarkSVG";
 import BookmarkSVG from "../../assets/icons/BookmarkSVG";
+
+// Utility Module
+import formatDate from "../../utils/formatDate";
+
+// Service Modules
 import bookmarkBlog from "../../services/blog/bookmarkBlog";
-import useAuthStore from "../../store/useAuthStore";
 
 const defaultBlogImage =
   require("../../assets/images/default_blog_image.jpg") as string;
 
 interface Props {
   title: string;
-  date: Date;
+  createdAt: { seconds: number };
   readTime: number;
   category: string;
-  image: string | null;
-  blogId: string;
+  thumbnail: string | null;
+  blogID: string;
 }
 
 const BlogTile: React.FC<Props> = ({
   title,
-  date,
+  createdAt,
   readTime,
   category,
-  image,
-  blogId,
+  thumbnail,
+  blogID,
 }) => {
-  const { role, userId } = useAuthStore((state) => state);
-
-  const blogIds = useUserInfoStore((state) => state.blogs);
+  const { role, userID, blogIDs } = useUserInfoStore((state) => state.info);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (role !== "Admin")
-      if (blogIds.includes(blogId)) {
-        setIsBookmarked(true);
-      } else {
-        setIsBookmarked(false);
-      }
-  }, [blogIds, role]);
+    if (role === "User" && blogIDs.length > 0) {
+      blogIDs.includes(blogID) ? setIsBookmarked(true) : setIsBookmarked(false);
+    } else {
+      setIsBookmarked(false);
+    }
+  }, [blogIDs, role, blogID]);
 
   return (
     <div className="blog-tile">
       <div className="blog-img">
-        <Link to={`/blog/${blogId}`}>
+        <Link to={`/blog/${blogID}`}>
           <img
-            src={image || defaultBlogImage}
+            src={thumbnail || defaultBlogImage}
             alt="related to heading of the blog"
           />
         </Link>
@@ -59,21 +62,24 @@ const BlogTile: React.FC<Props> = ({
           <h3>{title}</h3>
         ) : (
           <h3>
-            {title.slice(0, 70)} <Link to={`/blog/${blogId}`}>Read more</Link>
+            {title.slice(0, 70)}...
+            <Link to={`/blog/${blogID}`}>
+              <span>Read more</span>
+            </Link>
           </h3>
         )}
         <div>
-          {role !== "Admin" && (
+          {role === "User" && (
             <span
               onClick={() => {
-                userId && bookmarkBlog(userId, blogId);
+                userID && bookmarkBlog(userID, blogID);
               }}
             >
               {isBookmarked ? <ActiveBookmarkSVG /> : <BookmarkSVG />}
             </span>
           )}
           <span>
-            {formatDate(new Date((date as any).seconds * 1000), "partial")}
+            {formatDate(new Date(createdAt.seconds * 1000), "partial")}
           </span>
           <span>{readTime} Min Read</span>
           <span>#{category}</span>

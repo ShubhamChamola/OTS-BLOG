@@ -1,15 +1,26 @@
+// React Modules
+import { useEffect, useState, lazy, Suspense } from "react";
+import { useLocation } from "react-router-dom";
+
+// Asset Modules
 import Logo from "../../components/ui/Logo";
+
+// Component Modules
 import SignedInLinks from "./components/SignedInLinks";
 import SignedOutLinks from "./components/SignedOutLinks";
-import useAuthStore from "../../store/useAuthStore";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Theme from "../../features/site_theme";
-import BlogCategories from "../../features/blog_categories";
+import useUserInfoStore from "../../store/useUserInfoStore";
+import UILoader from "../../components/loaders/ui-loader/UILoader";
+import useLoaderStore from "../../store/useLoaderStore";
+
+const Theme = lazy(() => import("../../features/site_theme"));
+const BlogCategories = lazy(() => import("../../features/blog_categories"));
 
 const Navigation: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
+  const intialFetching = useLoaderStore(
+    (state) => state.isFetchingInitialUserInfo
+  );
 
   const [menuActive, setMenuActive] = useState(false);
   const [mobileView, setMobileView] = useState(false);
@@ -30,7 +41,7 @@ const Navigation: React.FC = () => {
     });
   }, []);
 
-  // Remove active class from hamenu as well as nav-links whenever the path is changed
+  // Remove active class from ham menu as well as nav-links whenever the path is changed
   useEffect(() => {
     document.querySelector(".ham-menu")?.classList.remove("active");
     document.querySelector(".nav-links")?.classList.remove("active");
@@ -42,38 +53,46 @@ const Navigation: React.FC = () => {
     if (menuActive) {
       document.querySelector("body")!.style.overflow = "hidden";
     } else {
-      document.querySelector("body")!.style.overflow = "scroll";
+      document.querySelector("body")!.style.overflowY = "scroll";
     }
   }, [menuActive]);
 
-  const userId = useAuthStore((state) => state.userId);
+  const userID = useUserInfoStore((state) => state.info?.userID);
 
   return (
     <nav>
       <Logo />
-      <ul className="nav-links">
-        <div>{userId ? <SignedInLinks /> : <SignedOutLinks />}</div>
-        {mobileView && (
-          <>
-            <Theme />
-            {path === "/" && <BlogCategories />}
-          </>
-        )}
-      </ul>
-      <div
-        className="ham-menu"
-        onClick={(event) => {
-          setMenuActive((prev) => {
-            return !prev;
-          });
-          event.currentTarget.classList.toggle("active");
-          document.querySelector(".nav-links")!.classList.toggle("active");
-        }}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      {intialFetching ? (
+        <>
+          <UILoader />
+        </>
+      ) : (
+        <>
+          <ul className="nav-links">
+            {userID ? <SignedInLinks /> : <SignedOutLinks />}
+            {mobileView && (
+              <Suspense fallback={<UILoader />}>
+                <Theme />
+                {path === "/" && <BlogCategories />}
+              </Suspense>
+            )}
+          </ul>
+          <div
+            className="ham-menu"
+            onClick={(event) => {
+              setMenuActive((prev) => {
+                return !prev;
+              });
+              event.currentTarget.classList.toggle("active");
+              document.querySelector(".nav-links")!.classList.toggle("active");
+            }}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </>
+      )}
     </nav>
   );
 };

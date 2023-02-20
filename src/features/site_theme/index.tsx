@@ -1,10 +1,12 @@
+// React Modules
 import { useEffect, useState } from "react";
+
+// Component Modules
 import RadioBtnActive from "../../assets/icons/RadioBtnActive";
 import RadioBtn from "../../assets/icons/RadioBtn";
 
 const Theme: React.FC = () => {
   const bodyRef = document.querySelector("body");
-
   const [lightThemeTrue, setLightThemeTrue] = useState(
     bodyRef?.classList.contains("light") ? true : false
   );

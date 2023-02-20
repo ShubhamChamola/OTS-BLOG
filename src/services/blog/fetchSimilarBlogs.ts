@@ -1,3 +1,4 @@
+// Firebase Modules
 import {
   collection,
   orderBy,
@@ -8,30 +9,46 @@ import {
 } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
 
-interface Blog {
-  id: string;
+interface BlogTileType {
+  blogID: string;
   title: string;
-  intro: string;
   category: string;
-  image: string | null;
+  thumbnail: string | null;
   readTime: number;
-  body: string;
-  createdAt: Date;
+  createdAt: { seconds: number };
 }
 
-export default async function fetchSimilarBlogs(category: string) {
-  const blogsQuery = await query(
-    collection(firestoreDB, "blogs"),
-    where("category", "==", category),
-    orderBy("createdAt", "desc"),
-    limit(3)
-  );
+export default async function fetchSimilarBlogs(
+  category: string,
+  currBlogID: string,
+  setBlogs: React.Dispatch<React.SetStateAction<BlogTileType[]>>,
+  setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  try {
+    const blogsQuery = query(
+      collection(firestoreDB, "blogs"),
+      where("category", "==", category),
+      orderBy("createdAt", "desc"),
+      limit(4)
+    );
 
-  const fetchResult: Blog[] = [];
+    const querySnapshot = await getDocs(blogsQuery);
 
-  const querySnapshot = await getDocs(blogsQuery);
-  querySnapshot.forEach((doc) => {
-    fetchResult.push({ id: doc.id, ...doc.data() } as Blog);
-  });
-  return fetchResult;
+    const blogs: BlogTileType[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const { title, createdAt, readTime, category, thumbnail } = doc.data();
+      let blogID = doc.id;
+      if (blogID !== currBlogID && blogs.length <= 3) {
+        blogs.push({ blogID, title, createdAt, readTime, category, thumbnail });
+      }
+    });
+
+    setBlogs(blogs);
+    setIsFetching(false);
+  } catch (error) {
+    setBlogs([]);
+    setIsFetching(false);
+    console.log(error);
+  }
 }

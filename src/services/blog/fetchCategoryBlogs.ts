@@ -1,3 +1,4 @@
+// Firebase Modules
 import {
   collection,
   orderBy,
@@ -8,15 +9,17 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
-import useHomeBlogStore from "../../store/useHomeBlogStore";
 
-interface Blog {
+// Store Module
+import useHomeBlogStore from "../../store/useBlogBrowseStore";
+
+interface BlogDataType {
   title: string;
   category: string;
-  image: string | null;
+  thumbnail: string | null;
   readTime: number;
-  createdAt: Date;
-  blogId: string;
+  createdAt: { seconds: number };
+  blogID: string;
 }
 
 export default async function fetchCategoryBlogs(
@@ -29,66 +32,75 @@ export default async function fetchCategoryBlogs(
     | "Maintenance"
     | "Luxury Bikes"
 ) {
-  let lastDoc = useHomeBlogStore.getState().lastDocSnap;
+  try {
+    useHomeBlogStore.setState({ isFetching: true });
+    let lastDoc = useHomeBlogStore.getState().lastDocSnap;
+    let blogsQuery: any;
 
-  let blogsQuery: any;
-  if (category === "All Blogs") {
-    if (lastDoc) {
-      blogsQuery = query(
-        collection(firestoreDB, "blogs"),
-        orderBy("createdAt", "desc"),
-        startAfter(lastDoc),
-        limit(8)
-      );
+    if (category === "All Blogs") {
+      if (lastDoc) {
+        blogsQuery = query(
+          collection(firestoreDB, "blogs"),
+          orderBy("createdAt", "desc"),
+          startAfter(lastDoc),
+          limit(8)
+        );
+      } else {
+        blogsQuery = query(
+          collection(firestoreDB, "blogs"),
+          orderBy("createdAt", "desc"),
+          limit(8)
+        );
+      }
     } else {
-      blogsQuery = query(
-        collection(firestoreDB, "blogs"),
-        orderBy("createdAt", "desc"),
-        limit(8)
-      );
+      if (lastDoc) {
+        blogsQuery = query(
+          collection(firestoreDB, "blogs"),
+          where("category", "==", category),
+          orderBy("createdAt", "desc"),
+          startAfter(lastDoc),
+          limit(10)
+        );
+      } else {
+        blogsQuery = query(
+          collection(firestoreDB, "blogs"),
+          where("category", "==", category),
+          orderBy("createdAt", "desc"),
+          limit(10)
+        );
+      }
     }
-  } else {
-    if (lastDoc) {
-      blogsQuery = query(
-        collection(firestoreDB, "blogs"),
-        where("category", "==", category),
-        orderBy("createdAt", "desc"),
-        startAfter(lastDoc),
-        limit(10)
-      );
-    } else {
-      blogsQuery = query(
-        collection(firestoreDB, "blogs"),
-        where("category", "==", category),
-        orderBy("createdAt", "desc"),
-        limit(10)
-      );
-    }
-  }
 
-  const querySnapshot = await getDocs(blogsQuery);
-  const queryResult: Blog[] = [];
-  let index = 0;
-  querySnapshot.forEach((doc) => {
-    const { title, category, image, readTime, createdAt } = doc.data() as Blog;
+    const querySnapshot = await getDocs(blogsQuery);
+    const queryResult: BlogDataType[] = [];
+    let index = 0;
 
-    const blogId = doc.id;
+    querySnapshot.forEach((doc) => {
+      const { title, category, thumbnail, readTime, createdAt } =
+        doc.data() as BlogDataType;
 
-    queryResult.push({
-      title,
-      category,
-      image,
-      readTime,
-      createdAt,
-      blogId,
+      queryResult.push({
+        title,
+        category,
+        thumbnail,
+        readTime,
+        createdAt,
+        blogID: doc.id,
+      });
+      index++;
+      if (index === 8) {
+        useHomeBlogStore.setState({ lastDocSnap: doc });
+      }
     });
-    index++;
-    if (index === 8) {
-      useHomeBlogStore.setState({ lastDocSnap: doc });
-    }
-  });
-  const prevBlogs = useHomeBlogStore.getState().blogs;
-  if (prevBlogs)
-    useHomeBlogStore.setState({ blogs: [...prevBlogs, ...queryResult] });
-  else useHomeBlogStore.setState({ blogs: queryResult });
+    const prevBlogs = useHomeBlogStore.getState().blogs;
+    if (prevBlogs)
+      useHomeBlogStore.setState({
+        blogs: [...prevBlogs, ...queryResult],
+        isFetching: false,
+      });
+    else useHomeBlogStore.setState({ blogs: queryResult, isFetching: false });
+  } catch (error) {
+    console.log(error);
+    useHomeBlogStore.setState({ blogs: [], noOfBlogs: 0, isFetching: false });
+  }
 }

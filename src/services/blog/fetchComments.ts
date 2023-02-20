@@ -9,27 +9,38 @@ import {
 } from "firebase/database";
 
 export default async function fetchComments(
-  blogId: string,
+  blogID: string,
   setComments: React.Dispatch<
     React.SetStateAction<
-      { userId: string; role: "Admin" | "User"; text: string }[]
+      { userID: string; role: "Admin" | "User"; text: string }[]
     >
   >,
   lastCommentKey: string,
-  setLastCommentKey: React.Dispatch<React.SetStateAction<string | null>>
+  setLastCommentKey: React.Dispatch<React.SetStateAction<string | null>>,
+  setBtnDisabled: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  const commentsQuery = query(
-    ref(realtimeDB, `comments/${blogId}`),
-    orderByKey(),
-    endBefore(lastCommentKey),
-    limitToLast(10)
-  );
+  try {
+    const commentsQuery = query(
+      ref(realtimeDB, `comments/${blogID}`),
+      orderByKey(),
+      endBefore(lastCommentKey),
+      limitToLast(10)
+    );
 
-  let comments = await get(commentsQuery);
+    let comments = await get(commentsQuery);
+    if (comments.size > 0) {
+      setComments((prev) => {
+        return [...prev, ...(Object.values(comments.val()).reverse() as [])];
+      });
+    } else {
+      setBtnDisabled(true);
+    }
+    if (comments.size < 10) {
+      setBtnDisabled(true);
+    }
 
-  setComments((prev) => {
-    return [...prev, ...(Object.values(comments.val()).reverse() as [])];
-  });
-
-  setLastCommentKey(Object.keys(comments.val())[0]);
+    setLastCommentKey(Object.keys(comments.val())[0]);
+  } catch (error) {
+    console.log(error);
+  }
 }

@@ -1,27 +1,30 @@
 import { doc, getDoc } from "firebase/firestore";
 import { firestoreDB } from "../../lib/firebase";
 
-interface BlogType {
+interface BlogTileType {
   title: string;
   category: string;
-  image: string | null;
+  thumbnail: string | null;
   readTime: number;
-  createdAt: Date;
-  blogId: string;
+  createdAt: { seconds: number };
+  blogID: string;
 }
 
 export default async function fetchBlogsBasedOnIds(
-  Ids: string[],
-  setBlogs: React.Dispatch<React.SetStateAction<[] | BlogType[]>>
+  blogIDs: string[],
+  setBlogs: React.Dispatch<React.SetStateAction<[] | BlogTileType[]>>,
+  setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   try {
-    Ids.forEach(async (id) => {
+    setIsFetching(true);
+    blogIDs.forEach(async (id) => {
       const blogRef = doc(firestoreDB, "blogs", id);
 
       const blogSnap = await getDoc(blogRef);
 
       if (blogSnap.exists()) {
-        const { title, category, image, readTime, createdAt } = blogSnap.data();
+        const { title, category, thumbnail, readTime, createdAt } =
+          blogSnap.data();
 
         setBlogs((prev) => {
           return [
@@ -29,16 +32,21 @@ export default async function fetchBlogsBasedOnIds(
             {
               title,
               category,
-              image,
+              thumbnail,
               readTime,
               createdAt,
-              blogId: blogSnap.id,
+              blogID: blogSnap.id,
             },
           ];
         });
+        setIsFetching(false);
+      } else {
+        setIsFetching(false);
+        throw new Error("Blog Not Found!");
       }
     });
   } catch (error) {
+    setIsFetching(false);
     console.log(error);
   }
 }

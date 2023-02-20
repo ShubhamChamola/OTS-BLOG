@@ -1,72 +1,112 @@
-@use "./variable";
 @use "../../layouts/home_page_aside/home_aside";
 @use "../../features/blog_content/blogContent";
-@use "../../features/comment_tile/commentTile";
+@use "../../features/comment_section/commentSection";
+
+body.light {
+  .overflow-container::-webkit-scrollbar-thumb {
+    background-color: rgba(109, 125, 139, 0.3) !important;
+  }
+}
 
 #blog-page {
   width: 100%;
   background: var(--secondary-bg);
   color: var(--primary-color);
-  padding: 6em;
+  padding: 6em 0em;
 
   #blog-container {
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: 336px 1fr;
     justify-content: center;
-    gap: 6em;
+    gap: 4em;
   }
 
   #similar-blogs {
-    margin-top: 4em;
     grid-column: 1/3;
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
-    column-gap: 2em;
-    row-gap: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
 
     h4 {
       font-size: 1.5rem;
       grid-column: 1/4;
     }
-    & > p {
-      grid-column: 1/4;
-      font-size: 1.5rem;
-      text-align: center;
-      color: var(--tertiary-color);
-      opacity: 0.8;
+
+    .overflow-container {
+      display: flex;
+      gap: 4em;
+      overflow-x: auto;
+      max-width: 1200px;
+      padding: 1em 2em 1em 1em;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: var(--primary-bg);
+        width: 0px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(222, 222, 222, 0.3);
+        border-radius: 5px;
+      }
+
+      .blog-tile {
+        min-width: 400px;
+      }
     }
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 1300px) {
   #blog-page {
-    padding: 8em 0em;
-    padding-bottom: 6em;
+    #similar-blogs .overflow-container {
+      max-width: calc(100vw - 2em);
+    }
+  }
+}
 
+@media screen and (max-width: 1100px) {
+  #blog-page {
     #blog-container {
       display: flex;
       flex-direction: column;
-      gap: 0em;
-      padding: 0;
+      gap: 8em;
+    }
+    #home-page-aside {
+      display: none;
     }
 
-    #similar-blogs {
-      display: flex;
-      flex-direction: column;
-      padding: 5em 0em;
+    #specific-blog {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+}
 
+@media screen and (max-width: 850px) {
+  #blog-page {
+    padding: 7em 0em 3em 0em;
+
+    #similar-blogs {
       h4 {
         font-size: 1.25rem;
       }
+    }
+  }
+}
 
+@media screen and (max-width: 600px) {
+  #blog-page {
+    #similar-blogs .overflow-container {
+      padding: 0em 0em 1em 0em;
+      gap: 2em;
       .blog-tile {
-        margin-bottom: 2em;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
+        min-width: calc(100vw - 2.9em);
       }
     }
   }

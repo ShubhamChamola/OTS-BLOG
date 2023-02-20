@@ -1,23 +1,38 @@
-import { deleteUser, signOut } from "firebase/auth";
-import { auth, firestoreDB } from "../../lib/firebase";
+// Firebase Modules
+import { deleteUser } from "firebase/auth";
+import { auth, firestoreDB, storage } from "../../lib/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
-import useLoadingState from "../../store/useLoadState";
+import { ref, deleteObject } from "firebase/storage";
 
-const { setIsLoading } = useLoadingState.getState();
+// Store Module
+import useLoaderStore from "../../store/useLoaderStore";
+import useUserInfoStore from "../../store/useUserInfoStore";
+import signOutUser from "./signOutUser";
 
 export default async function deleteAccount() {
-  const user = auth.currentUser;
+  try {
+    deleteUser(auth.currentUser!).catch((error) => {
+      console.log(error);
+      throw new Error(error);
+    });
+    useLoaderStore.setState({ isLoading: true });
+    const { userID } = useUserInfoStore.getState().info;
 
-  setIsLoading(true);
+    await deleteDoc(doc(firestoreDB, "users", userID!));
 
-  await deleteDoc(doc(firestoreDB, "users", user!.uid));
-  console.log("doc deleted");
+    const desertRef = ref(storage, `user_avatar/${userID}`);
 
-  await deleteUser(user!).then(() => {
-    setIsLoading(false);
-  });
+    await deleteObject(desertRef);
 
-  // Remove the avatar image related to the account
+    useLoaderStore.setState({ isLoading: false });
 
-  await signOut(auth);
+    deleteUser(auth.currentUser!);
+    await signOutUser();
+  } catch (error) {
+    console.log("Unable To Delete The User!", error);
+    alert(
+      "Plz Sign out and log in again to delete your account, for security purpose you need to be a recently logged in user for deleting your account"
+    );
+    useLoaderStore.setState({ isLoading: false });
+  }
 }

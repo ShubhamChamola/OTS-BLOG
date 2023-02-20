@@ -1,30 +1,34 @@
+// React Modules
 import { useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+// Component Modules
 import ManageAccountAside from "../layouts/manage_account_aside";
 import Container from "../components/ui/Container";
-import { Outlet } from "react-router-dom";
-import useAuthStore from "../store/useAuthStore";
+import PageLoader from "../components/loaders/page_loader/PageLoader";
+
+// CSS Modules
 import "../assets/styles/manageAccountPage.scss";
-import ComponentLoader from "../components/loaders/component_loader/ComponentLoader";
 
+// Store Module
+import useUserInfoStore from "../store/useUserInfoStore";
 const ManageAccountPage: React.FC = () => {
-  const userId = useAuthStore((state) => state.userId);
-
-  console.log("ohh yehaas");
+  const { userID } = useUserInfoStore((store) => store.info);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userId) {
+    if (!userID) {
       navigate("/");
     }
-  }, [userId]);
+  }, [userID]);
 
   return (
     <section id="manage-account">
       <Container id="manage-account-container">
         <ManageAccountAside />
-        <Suspense fallback={<ComponentLoader />}>
+        <Suspense fallback={<PageLoader removeAside={true} />}>
           <Outlet />
         </Suspense>
       </Container>

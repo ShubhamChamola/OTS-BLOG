@@ -1,20 +1,26 @@
+// React Module
 import { NavLink } from "react-router-dom";
-import useAuthStore from "../../store/useAuthStore";
+
+// Store Module
 import useUserInfoStore from "../../store/useUserInfoStore";
 
+const dummyAvatar =
+  require("../../assets/images/user-dummy-avatar.png") as string;
+
 const ManageAccountAside: React.FC = () => {
-  const userInfo = useUserInfoStore((state) => state);
-  const role = useAuthStore((state) => state.role);
+  const { firstName, lastName, role, avatar } = useUserInfoStore(
+    (store) => store.info
+  );
 
   return (
     <aside id="manage-account-aside">
       <div className="profile">
         <div
           className="avatar"
-          style={{ background: `url(${userInfo.avatar})` }}
+          style={{ background: `url(${avatar || dummyAvatar})` }}
         ></div>
         <h4>
-          {userInfo.firstName} {userInfo.lastName}
+          {firstName} {lastName}
         </h4>
       </div>
       {role === "Admin" ? (

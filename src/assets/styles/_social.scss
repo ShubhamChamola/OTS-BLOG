@@ -1,5 +1,3 @@
-@use "variable";
-
 #socials {
   display: flex;
   flex-direction: column;
@@ -22,10 +20,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      &:hover {
+        svg {
+          width: 20px;
+        }
+      }
     }
 
     svg {
       width: 100%;
+      transition: all linear 0.1s;
     }
   }
 }

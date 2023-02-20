@@ -1,3 +1,4 @@
+// Component Modules
 import FollowSocial from "../../../components/global/Social";
 import Logo from "../../../components/ui/Logo";
 

@@ -4,7 +4,7 @@
 @use "../../features/blog_categories/category";
 @use "../../features/liked_by_others/liked_blogs";
 
-#homePageAside {
+#home-page-aside {
   grid-column: 1/2;
   width: 100%;
   width: 336px;
@@ -35,13 +35,13 @@
 }
 
 @media screen and (max-width: 1350px) {
-  #homePageAside {
+  #home-page-aside {
     left: 0;
   }
 }
 
 @media screen and (max-width: 850px) {
-  #homePageAside {
+  #home-page-aside {
     display: none;
   }
 }

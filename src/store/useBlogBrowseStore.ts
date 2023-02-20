@@ -1,16 +1,15 @@
 import create from "zustand";
 
-interface Blog {
+interface BlogDataType {
   title: string;
   category: string;
-  image: string | null;
+  thumbnail: string | null;
   readTime: number;
-  createdAt: Date;
-  blogId: string;
+  createdAt: { seconds: number };
+  blogID: string;
 }
 
 interface State {
-  search: string | null;
   category:
     | "All Blogs"
     | "Bike Reviews"
@@ -19,18 +18,19 @@ interface State {
     | "Latest News"
     | "Maintenance"
     | "Luxury Bikes";
-  blogs: Blog[] | null;
+  blogs: BlogDataType[] | [];
   noOfBlogs: number;
   lastDocSnap: any;
+  isFetching: boolean;
 }
 
 const useStore = create<State>((set) => ({
-  search: null,
   category: "All Blogs",
   blogs: [],
   noOfBlogs: 0,
   lastDocSnap: null,
+  isFetching: true,
 }));
 
-const useHomeBlogStore = useStore;
-export default useHomeBlogStore;
+const useBlogBrowseStore = useStore;
+export default useBlogBrowseStore;

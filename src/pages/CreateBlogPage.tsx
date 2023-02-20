@@ -1,18 +1,28 @@
-import BlogCreator from "../features/blog_creator";
-import BackArrowSVG from "../assets/icons/BackArrowSVG";
-import Container from "../components/ui/Container";
+// React Modules
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import useAuthStore from "../store/useAuthStore";
+
+// Component Modules
+import BlogCreator from "../features/blog_creator";
+import Container from "../components/ui/Container";
+
+// Assets Modules
+import BackArrowSVG from "../assets/icons/BackArrowSVG";
+
+// CSS Modules
 import "../assets/styles/createBlogPage.scss";
 
+// Store Modules
+import useUserInfoStore from "../store/useUserInfoStore";
+
 const CreateBlogPage: React.FC = () => {
-  console.log("create blog page");
-  const role = useAuthStore((state) => state.role);
+  const { role } = useUserInfoStore((store) => store.info);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (role === "User") {
+    if (role === "Admin") {
+      return;
+    } else {
       navigate(-1);
     }
   }, [role]);

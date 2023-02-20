@@ -1,57 +1,75 @@
+// React Modules
+import { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+
+// Asset Modules
 import LikeSVG from "../../../assets/icons/LikeSVG";
 import ActiveLikeSVG from "../../../assets/icons/ActiveLikeSVG";
 import CommentSVG from "../../../assets/icons/CommentSVG";
 import ShareSVG from "../../../assets/icons/ShareSVG";
 import BookmarkSVG from "../../../assets/icons/BookmarkSVG";
-import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import useAuthStore from "../../../store/useAuthStore";
-import fetchLikeInfo from "../../../services/blog/fetchLikeInfo";
+import ActiveBookmarkSVG from "../../../assets/icons/ActiveBookmarkSVG";
+
+// Service Modules
 import likeBlog from "../../../services/blog/likeBlog";
 import bookmarkBlog from "../../../services/blog/bookmarkBlog";
-import ActiveBookmarkSVG from "../../../assets/icons/ActiveBookmarkSVG";
+
+// Store Module
 import useUserInfoStore from "../../../store/useUserInfoStore";
 
 const BlogInteraction: React.FC = () => {
-  const [likedState, setLikedState] = useState(false);
-
   const location = useLocation();
-
-  const blogIds = useUserInfoStore((state) => state.blogs);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
-  const { blogId } = useParams();
+  const { blogID } = useParams();
 
-  const { role, userId } = useAuthStore((state) => state);
+  const { role, userID, blogIDs, likedBlogs } = useUserInfoStore(
+    (state) => state.info
+  );
 
+  // This useEffect is used for checking wether the blog is liked by user or not
   useEffect(() => {
-    if (blogId && userId) fetchLikeInfo(blogId, userId, setLikedState);
-  }, [userId, blogId]);
+    if (blogID && likedBlogs.includes(blogID)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [likedBlogs, blogID]);
 
+  // This useEffect check wether this blog was bookmarked by the user or not
   useEffect(() => {
-    if (role !== "Admin")
-      if (blogId && blogIds.includes(blogId)) {
+    if (role === "User")
+      if (blogID && blogIDs.includes(blogID)) {
         setIsBookmarked(true);
       } else {
         setIsBookmarked(false);
       }
-  }, [blogIds, blogId, role]);
+  }, [blogIDs, blogID, role]);
 
   return (
     <ul id="blog-interaction">
       <li
         onClick={() => {
-          likeBlog(blogId!, userId!);
+          userID && blogID && likeBlog(blogID!);
         }}
       >
-        {likedState ? <ActiveLikeSVG /> : <LikeSVG />}
+        {isLiked ? <ActiveLikeSVG /> : <LikeSVG />}
       </li>
-      <li>
+      <li
+        onClick={() => {
+          document
+            .querySelector("#comment-section")
+            ?.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
         <CommentSVG />
       </li>
       <li
         onClick={() => {
-          navigator.clipboard.writeText(location.pathname);
+          navigator.clipboard.writeText(
+            `${window.location.protocol}//${window.location.host}${location.pathname}`
+          );
         }}
       >
         <ShareSVG />
@@ -59,7 +77,7 @@ const BlogInteraction: React.FC = () => {
       {role !== "Admin" && (
         <li
           onClick={() => {
-            userId && blogId && bookmarkBlog(userId, blogId);
+            userID && blogID && bookmarkBlog(userID, blogID);
           }}
         >
           {isBookmarked ? <ActiveBookmarkSVG /> : <BookmarkSVG />}

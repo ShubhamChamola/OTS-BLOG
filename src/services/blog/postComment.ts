@@ -2,21 +2,25 @@ import { realtimeDB } from "../../lib/firebase";
 import { ref, set, push } from "firebase/database";
 
 interface CommentData {
-  blogId: string;
-  userId: string;
+  blogID: string;
+  userID: string;
   comment: string;
   role: "Admin" | "User";
 }
 
 export default async function postComment({
-  blogId,
-  userId,
+  blogID,
+  userID,
   role,
   comment: text,
 }: CommentData) {
-  set(push(ref(realtimeDB, `comments/${blogId}`)), {
-    userId,
-    text,
-    role,
-  });
+  try {
+    await set(push(ref(realtimeDB, `comments/${blogID}`)), {
+      userID,
+      text,
+      role,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }

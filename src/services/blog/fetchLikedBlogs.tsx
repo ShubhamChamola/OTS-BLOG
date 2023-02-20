@@ -1,3 +1,4 @@
+// Firebase Modules
 import {
   collection,
   query,
@@ -11,8 +12,8 @@ import { firestoreDB } from "../../lib/firebase";
 interface Blog {
   title: string;
   readTime: number;
-  createdAt: Date;
-  blogId: string;
+  createdAt: { seconds: number };
+  blogID: string;
 }
 
 export default async function fetchLikedBlogs(
@@ -31,11 +32,11 @@ export default async function fetchLikedBlogs(
       limit(5)
     );
 
-    const unsubscribe = onSnapshot(blogsQuery, (querySnapshot) => {
+    onSnapshot(blogsQuery, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
         setIsFetching(true);
         const { title, readTime, createdAt } = doc.data();
-        blogs.push({ title, readTime, createdAt, blogId: doc.id });
+        blogs.push({ title, readTime, createdAt, blogID: doc.id });
         setBlog(blogs);
         setIsFetching(false);
       });
