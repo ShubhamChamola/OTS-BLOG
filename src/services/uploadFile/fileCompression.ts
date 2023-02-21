@@ -11,15 +11,15 @@ export default async function fileCompression(image: File, type: string) {
   };
 
   if (type === "user_avatar" || type === "admin_avatar") {
-    // 20kb size width 300px
+    // 20kb
     options.maxSizeMB = 0.019;
     options.maxWidthOrHeight = 300;
   } else if (type === "blog_image/thumbnail") {
-    // 100kb size width 500px
+    // 100kb
     options.maxSizeMB = 0.0976;
     options.maxWidthOrHeight = 500;
   } else {
-    // 200kb size width 900px
+    // 200kb
     options.maxSizeMB = 0.195;
     options.maxWidthOrHeight = 800;
   }

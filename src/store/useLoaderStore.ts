@@ -4,15 +4,17 @@ import { devtools } from "zustand/middleware";
 let initialState = {
   isLoading: false,
   isFetchingInitialUserInfo: false,
+  isMobileMenuActive: false,
 };
 
 interface LoaderStoreType {
   isLoading: boolean;
   isFetchingInitialUserInfo: boolean;
+  isMobileMenuActive: boolean;
 }
 
 const useStore = create<LoaderStoreType>()(
-  devtools((set) => {
+  devtools(() => {
     return {
       ...initialState,
     };

@@ -20,31 +20,22 @@ body.light #initial-loader {
 }
 
 #initial-loader > svg {
-  width: 95%;
+  width: 98%;
   max-width: 700px;
   display: block;
 }
 
-#initial-loader > svg path {
-  stroke: #f35f44;
-  fill: #f35f44;
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  stroke-width: 3px;
-  animation: fill 2s ease infinite alternate;
+#initial-loader > svg {
+  opacity: 0;
+  animation: fill 3s linear forwards;
 }
 
 @keyframes fill {
   0% {
-    fill-opacity: 0;
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
-    stroke-width: 3px;
+    opacity: 0;
   }
 
   100% {
-    stroke-dashoffset: 0px;
-    stroke-width: 3px;
-    fill-opacity: 0.7;
+    opacity: 1;
   }
 }

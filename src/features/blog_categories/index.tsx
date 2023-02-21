@@ -6,10 +6,12 @@ import ArrowSVG from "../../assets/icons/ArrowSVG";
 
 // Store Module
 import useHomeBlogStore from "../../store/useBlogBrowseStore";
+import useLoaderStore from "../../store/useLoaderStore";
 
 const BlogCategories: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("All-Blogs");
   const { isFetching } = useHomeBlogStore((state) => state);
+  const { isMobileMenuActive } = useLoaderStore((state) => state);
 
   useEffect(() => {
     const allLinks = document.querySelectorAll("#set-categories ul li");
@@ -20,6 +22,12 @@ const BlogCategories: React.FC = () => {
       document.getElementById(activeCategory)?.classList.add("active");
     }
   }, [activeCategory]);
+
+  useEffect(() => {
+    if (!isMobileMenuActive) {
+      document.querySelector("#set-categories")?.classList.remove("active");
+    }
+  }, [isMobileMenuActive]);
 
   useEffect(() => {
     return () => {

@@ -52,7 +52,11 @@ const BlogContent: React.FC<BlogDataType> = ({
         <img src={fullSizeImage || dummyBlogImage} alt="related to the blog" />
       </div>
       {body.split("\n\n").map((para, index) => (
-        <p key={para.slice(0, 10) + index}>{para}</p>
+        <p key={para.slice(0, 10) + index}>
+          {para.split("\n").map((textLine) => (
+            <span>{textLine}</span>
+          ))}
+        </p>
       ))}
       {writterInfo ? (
         <BlogContentBase {...writterInfo} createdAt={createdAt} />

@@ -15,14 +15,22 @@ import useLoaderStore from "../../store/useLoaderStore";
 const Theme = lazy(() => import("../../features/site_theme"));
 const BlogCategories = lazy(() => import("../../features/blog_categories"));
 
+function manageMenuActive(target: any) {
+  const tags = ["BUTTON", "LI", "SPAN", "svg"];
+  if (tags.includes(target.tagName)) {
+    useLoaderStore.setState({ isMobileMenuActive: false });
+  }
+}
+
 const Navigation: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-  const intialFetching = useLoaderStore(
-    (state) => state.isFetchingInitialUserInfo
+  const { isFetchingInitialUserInfo: initialFetching } = useLoaderStore(
+    (store) => store
   );
+  const { userID } = useUserInfoStore((state) => state.info);
+  const { isMobileMenuActive } = useLoaderStore((store) => store);
 
-  const [menuActive, setMenuActive] = useState(false);
   const [mobileView, setMobileView] = useState(false);
 
   // Adding event listeners for window resize
@@ -41,34 +49,36 @@ const Navigation: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuActive) {
+      document.querySelector(".ham-menu")?.classList.add("active");
+      document.querySelector(".nav-links")?.classList.add("active");
+    } else {
+      document.querySelector(".ham-menu")?.classList.remove("active");
+      document.querySelector(".nav-links")?.classList.remove("active");
+    }
+  }, [isMobileMenuActive]);
+
   // Remove active class from ham menu as well as nav-links whenever the path is changed
   useEffect(() => {
-    document.querySelector(".ham-menu")?.classList.remove("active");
-    document.querySelector(".nav-links")?.classList.remove("active");
-    document.querySelector("body")!.style.overflow = "scroll";
+    useLoaderStore.setState({ isMobileMenuActive: false });
   }, [path]);
-
-  // Responsible for restricting body scroll when menu is active
-  useEffect(() => {
-    if (menuActive) {
-      document.querySelector("body")!.style.overflow = "hidden";
-    } else {
-      document.querySelector("body")!.style.overflowY = "scroll";
-    }
-  }, [menuActive]);
-
-  const userID = useUserInfoStore((state) => state.info?.userID);
 
   return (
     <nav>
       <Logo />
-      {intialFetching ? (
+      {initialFetching ? (
         <>
           <UILoader />
         </>
       ) : (
         <>
-          <ul className="nav-links">
+          <ul
+            className="nav-links"
+            onClick={(event) => {
+              manageMenuActive(event.target);
+            }}
+          >
             {userID ? <SignedInLinks /> : <SignedOutLinks />}
             {mobileView && (
               <Suspense fallback={<UILoader />}>
@@ -79,12 +89,13 @@ const Navigation: React.FC = () => {
           </ul>
           <div
             className="ham-menu"
-            onClick={(event) => {
-              setMenuActive((prev) => {
-                return !prev;
+            onClick={() => {
+              useLoaderStore.setState((state) => {
+                return {
+                  ...state,
+                  isMobileMenuActive: !state.isMobileMenuActive,
+                };
               });
-              event.currentTarget.classList.toggle("active");
-              document.querySelector(".nav-links")!.classList.toggle("active");
             }}
           >
             <span></span>

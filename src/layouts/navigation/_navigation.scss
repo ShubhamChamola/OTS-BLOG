@@ -135,7 +135,7 @@ nav {
       transition: all ease-out 0.4s;
 
       &.active {
-        overflow-y: scroll;
+        overflow-y: scroll !important;
         display: flex;
         min-height: 100vh;
         right: 0;

@@ -55,6 +55,12 @@
         width: 20px;
         height: 20px;
         transition: all linear 0.2s;
+        svg {
+          pointer-events: none;
+          path {
+            pointer-events: all;
+          }
+        }
       }
     }
 

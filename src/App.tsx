@@ -16,23 +16,32 @@ import "./assets/styles/global.scss";
 import useLoaderStore from "./store/useLoaderStore";
 
 const App: React.FC = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const { isLoading, isMobileMenuActive } = useLoaderStore((store) => store);
 
   useEffect(() => {
     // Remove the inital loader from DOM
     setTimeout(() => {
       (document.querySelector("#initial-loader") as HTMLElement).style.display =
         "none";
-    }, 800);
-    // (document.querySelector("#initial-loader") as HTMLElement).style.display =
-    //   "none";
+    }, 1000);
 
     useLoaderStore.setState({ isFetchingInitialUserInfo: true });
   }, []);
 
+  // Scroll to the top of the page whenever the rout is changed
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [pathname]);
+
+  // Stop the body scroll whenever loader is active
+  useEffect(() => {
+    if (isLoading || isMobileMenuActive) {
+      document.querySelector("body")!.style.overflow = "hidden";
+    } else {
+      document.querySelector("body")!.style.overflow = "auto";
+    }
+  }, [isLoading, isMobileMenuActive]);
 
   return (
     <>
