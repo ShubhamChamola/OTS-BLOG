@@ -28,13 +28,10 @@ const SignedOutLinks: React.FC = () => {
         </Button>
       </li>
       <li>
-        <Button
-          onClick={() => {
-            console.log("Book a Service");
-          }}
-          className="outlined-btn"
-        >
-          Book a Service
+        <Button className="outlined-btn">
+          <a href="https://www.onetapservice.in/" target="blank">
+            Book a Service
+          </a>
         </Button>
       </li>
     </>

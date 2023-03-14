@@ -18,14 +18,10 @@ const HomePageAside: React.FC = () => {
         {path === "/" && <BlogCategories />}
         <div id="service-modal">
           <h3>Want to get your two wheeler serviced?</h3>
-          <Button
-            id="book-service-aside"
-            className="solid-btn"
-            onClick={() => {
-              console.log("book a service");
-            }}
-          >
-            Book a Service
+          <Button id="book-service-aside" className="solid-btn">
+            <a href="https://www.onetapservice.in/" target={"blank"}>
+              Book a Service
+            </a>
           </Button>
         </div>
         <Social text="Follow us on Social Media" />

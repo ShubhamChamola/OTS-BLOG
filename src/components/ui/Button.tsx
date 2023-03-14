@@ -1,5 +1,5 @@
 interface BtnProp {
-  onClick: (event: any) => void;
+  onClick?: (event: any) => void;
   children: React.ReactNode;
   className: "solid-btn" | "outlined-btn";
   id?: string;
