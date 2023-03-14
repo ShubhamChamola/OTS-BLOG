@@ -1,3 +1,8 @@
+# Wroking Link
+[Live](https://ots-blog-uptr.vercel.app/)
+
+Sign Up with Google and create your account to get more personalised experience, don't worry google signin is authorized and under profile setting you will get an option to delete your account.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
