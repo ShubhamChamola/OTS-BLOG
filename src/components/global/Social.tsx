@@ -1,7 +1,9 @@
 import TwitterSVG from "../../assets/icons/TwitterSVG";
 import LinkedInSVG from "../../assets/icons/LinkedInSVG";
-import YoutubeSVG from "../../assets/icons/YoutubeSVG";
+import FacebookSVG from "../../assets/icons/FaceBookSVG";
 import InstagramSVG from "../../assets/icons/InstagramSVG";
+
+import { Link } from "react-router-dom";
 
 interface Props {
   text: string;
@@ -12,18 +14,25 @@ const FollowSocial: React.FC<Props> = ({ text }) => {
     <div id="socials">
       <h3>{text}</h3>
       <ul>
-        <li>
+        <a href="https://twitter.com/onetapservice" target={"blank"}>
           <TwitterSVG />
-        </li>
-        <li>
+        </a>
+        <a
+          href="https://www.linkedin.com/company/onetap-service/"
+          target={"blank"}
+        >
           <LinkedInSVG />
-        </li>
-        <li>
-          <YoutubeSVG />
-        </li>
-        <li>
+        </a>
+        <a
+          style={{ width: "30px" }}
+          href="https://www.facebook.com/profile.php?id=100088403531764&is_tour_dismissed=true"
+          target={"blank"}
+        >
+          <FacebookSVG />
+        </a>
+        <a href="https://www.instagram.com/onetapservice.in/" target={"blank"}>
           <InstagramSVG />
-        </li>
+        </a>
       </ul>
     </div>
   );

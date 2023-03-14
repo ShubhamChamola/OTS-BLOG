@@ -74,6 +74,9 @@ const Navigation: React.FC = () => {
       ) : (
         <>
           <ul
+            onScroll={() => {
+              console.log("scroll");
+            }}
             className="nav-links"
             onClick={(event) => {
               manageMenuActive(event.target);

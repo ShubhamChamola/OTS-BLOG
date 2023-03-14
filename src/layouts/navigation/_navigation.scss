@@ -102,7 +102,7 @@ nav {
 @media screen and (max-width: 1250px) {
   nav {
     max-width: 100%;
-    padding: 1.7em 1.5em;
+    padding: 1.7em 1em;
   }
 }
 
@@ -135,7 +135,7 @@ nav {
       transition: all ease-out 0.4s;
 
       &.active {
-        overflow-y: scroll !important;
+        overflow-y: scroll;
         display: flex;
         min-height: 100vh;
         right: 0;

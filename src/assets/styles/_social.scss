@@ -14,7 +14,9 @@
     align-items: flex-start;
     gap: 1.75em;
 
-    li {
+    a {
+      flex-shrink: 0;
+      display: block;
       width: 24px;
       height: 24px;
       display: flex;

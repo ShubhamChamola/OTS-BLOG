@@ -32,10 +32,18 @@ const Base: React.FC = () => {
       <div className="column-4">
         <div>
           <h4>HEAD OFFICE</h4>
-          <p>
-            Xilliams Corner Wine © 2017. 1112 A Market St # Ste B22,
-            Charlottesville, CA 45565
-          </p>
+          <p>Dehradun, Uttarakhand</p>
+        </div>
+        <div style={{ margin: "-1em 0" }}>
+          <h4>
+            <a
+              style={{ color: "#f35f44" }}
+              href="https://portfolio-rho-three-96.vercel.app/"
+              target="blank"
+            >
+              Meet The Developer
+            </a>
+          </h4>
         </div>
         <div>
           <h4>CONTACT</h4>

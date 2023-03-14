@@ -1,5 +1,5 @@
 // React Modules
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 // Components
@@ -18,6 +18,8 @@ import useLoaderStore from "./store/useLoaderStore";
 const App: React.FC = () => {
   const { pathname } = useLocation();
   const { isLoading, isMobileMenuActive } = useLoaderStore((store) => store);
+  const [displayNoneTimeout, setDisplayNoneTimeout] =
+    useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Remove the inital loader from DOM
@@ -34,14 +36,34 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  // Stop the body scroll whenever loader is active
+  // Stop the main and footer scroll whenever mobileMenu is active
   useEffect(() => {
-    if (isLoading || isMobileMenuActive) {
-      document.querySelector("body")!.style.overflow = "hidden";
+    if (isMobileMenuActive) {
+      const timer = setTimeout(() => {
+        document
+          .querySelector("html")
+          ?.classList.add("stop-body-elements-scroll");
+      }, 400);
+
+      setDisplayNoneTimeout(timer);
     } else {
-      document.querySelector("body")!.style.overflow = "auto";
+      if (displayNoneTimeout) {
+        clearTimeout(displayNoneTimeout);
+      }
+      document
+        .querySelector("html")
+        ?.classList.remove("stop-body-elements-scroll");
     }
-  }, [isLoading, isMobileMenuActive]);
+  }, [isMobileMenuActive]);
+
+  // Stops body scroll when a async function is triggered
+  useEffect(() => {
+    if (isLoading) {
+      document.querySelector("body")?.classList.add("stop-body-scroll");
+    } else if (!isLoading) {
+      document.querySelector("body")?.classList.remove("stop-body-scroll");
+    }
+  }, [isLoading]);
 
   return (
     <>

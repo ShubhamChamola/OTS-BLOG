@@ -19,6 +19,28 @@ html {
   font-family: var(--primary-font);
   font-size: clamp(20px, 5vw, 16px);
   scroll-behavior: smooth !important;
+  position: relative;
+}
+
+.stop-body-elements-scroll {
+  body {
+    max-height: 100vh;
+    overflow: scroll;
+  }
+
+  main,
+  footer {
+    display: none;
+  }
+
+  nav {
+    position: unset;
+  }
+}
+
+.stop-body-scroll {
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 body {
